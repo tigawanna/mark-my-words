@@ -56,7 +56,7 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
 
   return (
     <div className="flex flex-col gap-2 h-full justify-center items-center">
-      <h2 className="text-2xl font-bold">Add New Target</h2>
+      <h2 className="text-xl font-bold">Add New Publish Target</h2>
       <form onSubmit={handleFormSubmit} className="form">
         <div className="flex flex-col gap-2">
           <label className="form-label">
@@ -95,8 +95,8 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
                   method: e.target.value as PostTarget["method"],
                 }))
               }
-              className="form-select">
-              <option value="GET">GET</option>
+              className="bg-vscode-menu-selectionBackground p-2 w-full">
+              <option value="GET" >GET</option>
               <option value="POST">POST</option>
               <option value="PUT">PUT</option>
               <option value="PATCH">PATCH</option>

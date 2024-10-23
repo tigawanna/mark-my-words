@@ -16,13 +16,13 @@ export function PublicationSettingsList({ targets }: PublicationSettingsListProp
 
   return (
     <div className="flex min-w-[60%] flex-col  justify-center items-center gap-2">
-      <h2 className="text-2xl font-bold">Configured Targets</h2>
+      <h2 className="text-xl font-bold">Configured Targets</h2>
       {targets.length === 0 ? (
         <p className="empty-message">No targets configured yet</p>
       ) : (
         <ul className="w-full flex flex-wrap p-2 gap-2">
           {targets.map((target) => (
-            <li key={target.id} className="flex max-w-[45%] p-2 bg-vscode-editorGroup-dropBackground">
+            <li key={target.id} className="flex h-fit p-2 bg-vscode-editorGroup-dropBackground">
               <div className="flex flex-col gap-1 p-2">
                 <h3 className="text-2xl font-bold">{target.name}</h3>
                 <p className="text-lg">{target.endpoint}</p>
@@ -31,7 +31,7 @@ export function PublicationSettingsList({ targets }: PublicationSettingsListProp
                   <div className="flex flex-wrap gap-2">
                     <p className="headers-title">Headers:</p>
                     {Object.entries(target.headers).map(([key, value]) => (
-                      <p key={key} className="border rounded-lg px-2">
+                      <p key={key} className="border rounded-lg px-2 py-0.5">
                         {key}: {value}
                       </p>
                     ))}

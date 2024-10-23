@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { PostTarget } from "../extension/utils/config-manager.ts";
 import { PublicationSettingsList } from "./components/PublicationSettingsList.tsx";
 import { PublicationSettingsForm } from "./components/PublicationSettingsForm.tsx";
+import { PublishMarkdown } from "./components/PublishMArkdown.tsx";
 
 function App() {
   const [targets, setTargets] = useState<PostTarget[]>([]);
@@ -42,9 +43,10 @@ function App() {
 
   return (
     <main className="w-full h-full flex flex-col justify-center items-center gap-5 p-5">
-      <h1 className="text-4xl font-bold">Publication Target Configuration</h1>
-
-      <div className="flex flex-col border rounded-lg md:flex-row p-5 justify-evenly items-center gap-5 h-full w-full">
+      <h1 className="text-4xl font-bold text-start">Mark my words</h1>
+        <PublishMarkdown targets={targets}/>
+      <h1 className="text-xl font-bold">Publication Target Configuration</h1>
+      <div className="flex flex-col rounded-lg md:flex-row p-5 justify-evenly items-center gap-5 h-full w-full">
         {/* Target List */}
         <PublicationSettingsList targets={targets} setTargets={setTargets} />
         {/* Add Target Form */}
