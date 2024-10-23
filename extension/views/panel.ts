@@ -1,5 +1,6 @@
 import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from 'vscode';
 import { WebviewHelper } from './helper';
+import { ConfigurationManager } from '../utils/config-manager.ts';
 
 export class MainPanel {
   public static currentPanel: MainPanel | undefined;
@@ -12,6 +13,44 @@ export class MainPanel {
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
     this._panel.webview.html = WebviewHelper.setupHtml(this._panel.webview, context);
 
+    // Setup message handling
+    this._panel.webview.onDidReceiveMessage(
+      async (message) => {
+        switch (message.type) {
+          case "getTargets":
+            const targets = ConfigurationManager.getPostTargets();
+            this._panel.webview.postMessage({
+              type: "targetsLoaded",
+              data: targets,
+            });
+            break;
+          case "addTarget":
+            await ConfigurationManager.addPostTarget(message.data);
+            this._panel.webview.postMessage({
+              type: "targetAdded",
+              data: message.data,
+            });
+            break;
+          case "updateTarget":
+            await ConfigurationManager.updatePostTarget(message.data.id, message.data.target);
+            this._panel.webview.postMessage({
+              type: "targetUpdated",
+              data: message.data.target,
+            });
+            break;
+          case "deleteTarget":
+            await ConfigurationManager.deletePostTarget(message.data);
+            this._panel.webview.postMessage({
+              type: "targetDeleted",
+              data: message.data,
+            });
+            break;
+        }
+      },
+      null,
+      this._disposables
+    );
+
     WebviewHelper.setupWebviewHooks(this._panel.webview, this._disposables);
   }
 
@@ -19,25 +58,25 @@ export class MainPanel {
     if (MainPanel.currentPanel) {
       MainPanel.currentPanel._panel.reveal(ViewColumn.One);
     } else {
-      const panel = window.createWebviewPanel('showHelloWorld', 'Hello World', ViewColumn.One, {
+      const panel = window.createWebviewPanel("markMyWords", "Mark My Words", ViewColumn.One, {
         enableScripts: true,
       });
 
       MainPanel.currentPanel = new MainPanel(panel, context);
     }
-    MainPanel.currentPanel._panel.webview.postMessage({ type: 'hello', data: 'Hello World!' });
+
+    // Load and send initial targets data
+    const targets = ConfigurationManager.getPostTargets();
+    MainPanel.currentPanel._panel.webview.postMessage({
+      type: "targetsLoaded",
+      data: targets,
+    });
   }
 
-  /**
-   * Cleans up and disposes of webview resources when the webview panel is closed.
-   */
   public dispose() {
     MainPanel.currentPanel = undefined;
-
-    // Dispose of the current webview panel
     this._panel.dispose();
 
-    // Dispose of all disposables (i.e. commands) for the current webview panel
     while (this._disposables.length) {
       const disposable = this._disposables.pop();
       if (disposable) {

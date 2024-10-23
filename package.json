@@ -14,26 +14,41 @@
   "contributes": {
     "commands": [
       {
-        "command": "mark-my-words.startMark",
+        "command": "markMyWords.startMark",
         "title": "Start Mark",
         "category": "Mark My Words"
       },
       {
-        "command": "mark-my-words.publishMarkdown",
+        "command": "markMyWords.publishMarkdown",
         "title": "Publish Markdown",
         "category": "Mark My Words"
       },
       {
-        "command": "mark-my-words.onRefactor",
+        "command": "markMyWords.askToken",
+        "title": "Ask Token",
+        "category": "Mark My Words"
+      },
+      {
+        "command": "markMyWords.onRefactor",
         "title": "Refactor",
         "category": "Mark My Words"
       },
       {
-        "command": "mark-my-words.start",
+        "command": "markMyWords.start",
         "title": "Start",
         "category": "Mark My Words"
       }
-    ]
+    ],
+            "configuration": {
+              "title": "Mark My Words",
+              "properties": {
+                "markMyWords.postTargets": {
+                  "type": "array",
+                  "default": [],
+                  "description": "Configured posting targets"
+                }
+              }
+            }
   },
   "scripts": {
     "dev": "vite",

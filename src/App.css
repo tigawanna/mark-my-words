@@ -4,4 +4,38 @@ main {
   justify-content: center;
   align-items: flex-start;
   height: 100%;
+  gap: 1rem;
+}
+
+.flex_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  gap: 1rem;
+}
+
+ul{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  gap: 1rem;
+  padding: 2%;
+  margin: 2%;
+}
+li{
+  padding:1rem;
+}
+form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+  height: 100%;
+  gap: 1rem;
+  padding: 2%;
+  margin: 2%;
 }
