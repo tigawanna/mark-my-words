@@ -2,7 +2,7 @@
 import { vscode } from "./utils/vscode";
 import { useEffect, useState } from "react";
 import type { PostTarget } from "../extension/utils/config-manager.ts";
-import "./App.css";
+
 
 function App() {
   const [targets, setTargets] = useState<PostTarget[]>([]);
@@ -86,13 +86,13 @@ function App() {
   };
 
   return (
-    <main className="container">
-      <h1 className="main-title">Post Target Configuration</h1>
+    <main className="w-full flex flex-col justify-center items-center gap-2 p-5">
+      <h1 className="text-4xl font-bold">Publication Target Configuration</h1>
 
-      <div className="grid-container">
+      <div className="flex flex-col md:flex-row justify-center items-center gap-2">
         {/* Target List */}
-        <div className="panel">
-          <h2 className="panel-title">Configured Targets</h2>
+        <div className="flex flex-col bg-vscode-editorGroup-dropBackground justify-center items-center gap-2">
+          <h2 className="text-2xl font-bold">Configured Targets</h2>
           {targets.length === 0 ? (
             <p className="empty-message">No targets configured yet</p>
           ) : (
