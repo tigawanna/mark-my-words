@@ -13,7 +13,6 @@
   "main": "dist/extension/index.js",
   "contributes": {
     "commands": [
-
       {
         "command": "markMyWords.publishSelected",
         "title": "Publish Selected",
@@ -35,9 +34,9 @@
         },
         "markMyWords.openWebview": {
           "type": "object",
-          "default":{
+          "default": {
             "targets": [],
-           "selectedText": ""
+            "selectedText": ""
           },
           "description": "The selected text"
         }
@@ -50,6 +49,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vscode-elements/elements": "^1.7.1",
     "@vscode/codicons": "^0.0.36",
     "@vscode/webview-ui-toolkit": "^1.4.0",
     "react": "^18.3.1",

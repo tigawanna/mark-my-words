@@ -1,7 +1,11 @@
 import { useState } from "react";
 import type { PostTarget } from "../../extension/utils/config-manager.ts";
 import { vscode } from "../utils/vscode.ts";
-
+import "@vscode-elements/elements/dist/vscode-badge";
+import "@vscode-elements/elements/dist/vscode-button";
+import "@vscode-elements/elements/dist/vscode-tabs";
+import "@vscode-elements/elements/dist/vscode-tab-header";
+import "@vscode-elements/elements/dist/vscode-tab-panel";
 interface PublicationSettingsFormProps {
   formData: PostTarget & { editing: boolean };
   setFormData: React.Dispatch<React.SetStateAction<PostTarget & { editing: boolean }>>;
@@ -23,6 +27,7 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
         [header.key]: header.value,
       },
     };
+
     if(formData.editing) {
       vscode.postMessage({
         type: "updateTarget",
@@ -71,6 +76,8 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
 
   return (
     <div className="flex flex-col gap-2 h-full justify-center items-center">
+      <vscode-button>Primary button</vscode-button>
+      <vscode-badge variant="activity-bar-counter">uwu</vscode-badge>
       <h2 className="text-xl font-bold">Add New Publish Target</h2>
       <form onSubmit={handleFormSubmit} className="form">
         <div className="flex flex-col gap-2">
@@ -111,7 +118,7 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
                 }))
               }
               className="bg-vscode-menu-selectionBackground p-2 w-full">
-              <option value="GET" >GET</option>
+              <option value="GET">GET</option>
               <option value="POST">POST</option>
               <option value="PUT">PUT</option>
               <option value="PATCH">PATCH</option>
@@ -164,7 +171,9 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
             {Object.entries(formData.headers).length > 0 && (
               <div className="flex flex-wrap  gap-2 w-full">
                 {Object.entries(formData.headers).map(([key, value]) => (
-                  <div key={key} className="flex justify-center items-center px-2 gap-2 border rounded-lg">
+                  <div
+                    key={key}
+                    className="flex justify-center items-center px-2 gap-2 border rounded-lg">
                     <span className="">
                       {key}: {value}
                     </span>
