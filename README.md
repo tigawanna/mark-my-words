@@ -1,6 +1,6 @@
 # Mark My Words
 
-a vscode extension tio publish selected snippet of text to a post target
+A vscode extension tio publish selected snippet of text to a post target
 
 vite + react + typescript + tailwindcss
 
@@ -11,3 +11,5 @@ helpful references:
 - [vscode elements react example](https://github.com/vscode-elements/react-example/tree/main)
 
 - [Ben awad intor to vscode plugins](https://youtu.be/a5DX5pQ9p5M?si=AZWMJRoGVLPdtTi7) : old video on how to use vscode plugins , probably use the stater code fro the vite vscode repo but the commands and techniques are almost the same
+ >[!NOTE]
+ > if you pick react remember to disbable strict mode
