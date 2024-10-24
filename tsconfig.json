@@ -1,5 +1,5 @@
 {
   "extends": "@tomjs/tsconfig/react.json",
-  "include": ["src"],
+  "include": ["src", "extension/claude/uwu.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

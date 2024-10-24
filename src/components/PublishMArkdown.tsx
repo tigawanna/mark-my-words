@@ -4,9 +4,11 @@ import { vscode } from "../utils/vscode.ts";
 
 interface PublishMarkdownProps {
   targets: PostTarget[];
+  selectedText: string;
+  setSelectedText: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export function PublishMarkdown({ targets }: PublishMarkdownProps) {
+export function PublishMarkdown({ targets,selectedText,setSelectedText }: PublishMarkdownProps) {
   const [selectedTargets, setSelectedTargets] = useState<string[]>([]);
   return (
     <div className="flex w-full flex-col  justify-center items-center gap-2">
@@ -41,7 +43,7 @@ export function PublishMarkdown({ targets }: PublishMarkdownProps) {
         </ul>
       )}
       <div className="flex w-full flex-col justify-center items-center gap-2">
-        <textarea className="w-full p-2 rounded-xl" rows={10} />
+        <textarea onChange={(e) => setSelectedText(e.target.value)} value={selectedText} className="w-full p-2 rounded-xl" rows={7} />
         <button className="">publish</button>
       </div>
     </div>

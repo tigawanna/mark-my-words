@@ -7,44 +7,77 @@ import { PublicationSettingsForm } from "./components/PublicationSettingsForm.ts
 import { PublishMarkdown } from "./components/PublishMArkdown.tsx";
 
 function App() {
-  const [targets, setTargets] = useState<PostTarget[]>([]);
-  const [formData, setFormData] = useState({
-    id: "",
-    name: "",
-    endpoint: "",
-    method: "POST" as PostTarget["method"],
-    headers: {} as Record<string, string>,
-  });
+   const [selectedText, setSelectedText] = useState<string>("");
+   const [targets, setTargets] = useState<PostTarget[]>([]);
+   const [formData, setFormData] = useState({
+     id: "",
+     name: "",
+     endpoint: "",
+     method: "POST" as PostTarget["method"],
+     headers: {} as Record<string, string>,
+   });
 
-  useEffect(() => {
-    vscode.postMessage({ type: "getTargets" });
 
-    const messageListener = (event: MessageEvent) => {
-      const message = event.data;
-      switch (message.type) {
-        case "targetsLoaded":
-          setTargets(message.data);
-          break;
-        case "targetAdded":
-          setTargets((prev) => [...prev, message.data]);
-          break;
-        case "targetDeleted":
-          setTargets((prev) => prev.filter((t) => t.id !== message.data));
-          break;
-        case "targetUpdated":
-          setTargets((prev) => prev.map((t) => (t.id === message.data.id ? message.data : t)));
-          break;
-      }
-    };
+     useEffect(() => {
+       window.addEventListener("message", (event) => {
+         if (event.data.type === "immediate") {
+           // Handle the initial data message
+           console.log("Received immediate data: =========== >>", event.data);
+         }
+       });
+     }, []);
 
-    window.addEventListener("message", messageListener);
-    return () => window.removeEventListener("message", messageListener);
-  }, []);
+   useEffect(() => {
+     // Signal that the webview is ready to receive data
+     vscode.postMessage({ type: "ready" });
+
+     const messageListener = (event: MessageEvent) => {
+       const message = event.data;
+      //  console.log("Received message:", message);
+      console.log("====== Received  data: =========== >>", message);
+      if (message.type === "immediate") {
+        // Handle the initial data message
+        console.log("====== Received immediate data: =========== >>", message);
+         }
+       switch (message.type) {
+         case "initialData":
+           if (message.data) {
+             setTargets(message.data.targets || []);
+             setSelectedText(message.data.selectedText || "");
+             setFormData((prev) => ({
+               ...prev,
+               content: message.data.selectedText || "",
+             }));
+           }
+           break;
+
+         case "targetsLoaded":
+           setTargets(message.data || []);
+           break;
+
+         case "targetAdded":
+           setTargets((prev) => [...prev, message.data]);
+           break;
+
+         case "targetDeleted":
+           setTargets((prev) => prev.filter((t) => t.id !== message.data));
+           break;
+
+         case "targetUpdated":
+           setTargets((prev) => prev.map((t) => (t.id === message.data.id ? message.data : t)));
+           break;
+       }
+     };
+
+     window.addEventListener("message", messageListener);
+     return () => window.removeEventListener("message", messageListener);
+   }, []);
+
 
   return (
     <main className="w-full h-full flex flex-col justify-center items-center gap-5 p-5">
       <h1 className="text-4xl font-bold text-start">Mark my words</h1>
-        <PublishMarkdown targets={targets}/>
+        <PublishMarkdown targets={targets} selectedText={selectedText} setSelectedText={setSelectedText}/>
       <h1 className="text-xl font-bold">Publication Target Configuration</h1>
       <div className="flex flex-col rounded-lg md:flex-row p-5 justify-evenly items-center gap-5 h-full w-full">
         {/* Target List */}
