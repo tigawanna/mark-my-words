@@ -4,9 +4,10 @@ import { vscode } from "../utils/vscode.ts";
 interface PublicationSettingsListProps {
   targets: PostTarget[];
   setTargets: React.Dispatch<React.SetStateAction<PostTarget[]>>;
+  setFormData: React.Dispatch<React.SetStateAction<PostTarget & { editing: boolean }>>;
 }
 
-export function PublicationSettingsList({ targets }: PublicationSettingsListProps) {
+export function PublicationSettingsList({ targets,setFormData }: PublicationSettingsListProps) {
   const handleDeleteTarget = (id: string) => {
     vscode.postMessage({
       type: "deleteTarget",
@@ -22,7 +23,9 @@ export function PublicationSettingsList({ targets }: PublicationSettingsListProp
       ) : (
         <ul className="w-full flex flex-wrap p-2 gap-2">
           {targets.map((target) => (
-            <li key={target.id} className="flex h-fit p-2 bg-vscode-editorGroup-dropBackground">
+            <li key={target.id} 
+              onClick={() => setFormData({ ...target, editing: true })}
+              className="flex h-fit p-2 bg-vscode-editorGroup-dropBackground">
               <div className="flex flex-col gap-1 p-2">
                 <h3 className="text-2xl font-bold">{target.name}</h3>
                 <p className="text-lg">{target.endpoint}</p>

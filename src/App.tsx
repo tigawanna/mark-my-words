@@ -15,17 +15,8 @@ function App() {
      endpoint: "",
      method: "POST" as PostTarget["method"],
      headers: {} as Record<string, string>,
+     editing: false,
    });
-
-
-     useEffect(() => {
-       window.addEventListener("message", (event) => {
-         if (event.data.type === "immediate") {
-           // Handle the initial data message
-           console.log("Received immediate data: =========== >>", event.data);
-         }
-       });
-     }, []);
 
    useEffect(() => {
      // Signal that the webview is ready to receive data
@@ -33,21 +24,19 @@ function App() {
 
      const messageListener = (event: MessageEvent) => {
        const message = event.data;
-      //  console.log("Received message:", message);
-      console.log("====== Received  data: =========== >>", message);
-      if (message.type === "immediate") {
-        // Handle the initial data message
-        console.log("====== Received immediate data: =========== >>", message);
-         }
        switch (message.type) {
+        case "immediate":
+          if (message.data && message.data.selectedText && message.data.selectedText.length > 1) {
+            setSelectedText(message.data.selectedText);
+            setFormData((prev) => ({
+              ...prev,
+              content: message.data.selectedText || "",
+            }));
+          }
+        break;
          case "initialData":
            if (message.data) {
              setTargets(message.data.targets || []);
-             setSelectedText(message.data.selectedText || "");
-             setFormData((prev) => ({
-               ...prev,
-               content: message.data.selectedText || "",
-             }));
            }
            break;
 
@@ -81,7 +70,7 @@ function App() {
       <h1 className="text-xl font-bold">Publication Target Configuration</h1>
       <div className="flex flex-col rounded-lg md:flex-row p-5 justify-evenly items-center gap-5 h-full w-full">
         {/* Target List */}
-        <PublicationSettingsList targets={targets} setTargets={setTargets} />
+        <PublicationSettingsList targets={targets} setTargets={setTargets} setFormData={setFormData}/>
         {/* Add Target Form */}
         <PublicationSettingsForm formData={formData} setFormData={setFormData} />
       </div>

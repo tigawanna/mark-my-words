@@ -15,13 +15,6 @@ interface PostTarget {
 export function activate(context: ExtensionContext) {
   context.subscriptions.push(
     commands.registerCommand("markMyWords.publishSelected", async () => {
-      // Capture the current selection before opening the panel
-      const editor = vscode.window.activeTextEditor;
-      if (editor) {
-        const selection = editor.selection;
-        const selectedText = editor.document.getText(selection);
-        SelectionStore.setSelectedText(selectedText);
-      }
       MainPanel.render(context);
     })
   );

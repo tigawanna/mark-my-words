@@ -3,8 +3,8 @@ import type { PostTarget } from "../../extension/utils/config-manager.ts";
 import { vscode } from "../utils/vscode.ts";
 
 interface PublicationSettingsFormProps {
-  formData: PostTarget;
-  setFormData: React.Dispatch<React.SetStateAction<PostTarget>>;
+  formData: PostTarget & { editing: boolean };
+  setFormData: React.Dispatch<React.SetStateAction<PostTarget & { editing: boolean }>>;
 }
 
 export function PublicationSettingsForm({ formData, setFormData }: PublicationSettingsFormProps) {
@@ -23,11 +23,25 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
         [header.key]: header.value,
       },
     };
+    if(formData.editing) {
+      vscode.postMessage({
+        type: "updateTarget",
+        data: {
+          id: formData.id,
+          target:{
+            ...formData,
+            editing: false,
 
-    vscode.postMessage({
-      type: "addTarget",
-      data: newTarget,
-    });
+          }
+        },
+      });
+    }else{
+      vscode.postMessage({
+        type: "addTarget",
+        data: newTarget,
+      });
+
+    }
 
     setFormData({
       id: "",
@@ -35,6 +49,7 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
       endpoint: "",
       method: "POST",
       headers: {},
+      editing: false,
     });
     setHeader({
       key: "",
