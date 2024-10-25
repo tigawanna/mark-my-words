@@ -1,6 +1,6 @@
 # Mark My Words
 
-A vscode extension tio publish selected snippet of text to a post target
+A vscode extension tio publish selected snippet of text to an endpoint
 
 vite + react + typescript + tailwindcss
 
