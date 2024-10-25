@@ -3,9 +3,8 @@ import type { PostTarget } from "../../extension/utils/config-manager.ts";
 import { vscode } from "../utils/vscode.ts";
 import "@vscode-elements/elements/dist/vscode-badge";
 import "@vscode-elements/elements/dist/vscode-button";
-import "@vscode-elements/elements/dist/vscode-tabs";
-import "@vscode-elements/elements/dist/vscode-tab-header";
-import "@vscode-elements/elements/dist/vscode-tab-panel";
+import "@vscode-elements/elements/dist/vscode-single-select";
+import { HeadersTable } from "./HeadersTable.tsx";
 interface PublicationSettingsFormProps {
   formData: PostTarget & { editing: boolean };
   setFormData: React.Dispatch<React.SetStateAction<PostTarget & { editing: boolean }>>;
@@ -28,24 +27,22 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
       },
     };
 
-    if(formData.editing) {
+    if (formData.editing) {
       vscode.postMessage({
         type: "updateTarget",
         data: {
           id: formData.id,
-          target:{
+          target: {
             ...formData,
             editing: false,
-
-          }
+          },
         },
       });
-    }else{
+    } else {
       vscode.postMessage({
         type: "addTarget",
         data: newTarget,
       });
-
     }
 
     setFormData({
@@ -109,7 +106,7 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
         <div className="flex flex-col gap-2 w-full">
           <label className="form-label">
             Method:
-            <select
+            <vscode-single-select
               value={formData.method}
               onChange={(e) =>
                 setFormData((prev) => ({
@@ -117,19 +114,29 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
                   method: e.target.value as PostTarget["method"],
                 }))
               }
-              className="bg-vscode-menu-selectionBackground p-2 w-full">
-              <option value="GET">GET</option>
-              <option value="POST">POST</option>
-              <option value="PUT">PUT</option>
-              <option value="PATCH">PATCH</option>
-              <option value="DELETE">DELETE</option>
-            </select>
+              id="select-example">
+              <vscode-option description="POST method" value="POST">
+                POST
+              </vscode-option>
+              <vscode-option selected description="GET method" value="GET">
+                GET
+              </vscode-option>
+              <vscode-option description="PUT method" value="PUT">
+                PUT
+              </vscode-option>
+              <vscode-option description="PATCH method" value="PATCH">
+                PATCH
+              </vscode-option>
+              <vscode-option description="DELETE method" value="DELETE">
+                DELETE
+              </vscode-option>
+            </vscode-single-select>
           </label>
         </div>
 
         {/* Headers Section */}
         <div className="flex flex-col gap-2 w-full">
-          <h3 className="text-xl">Headers</h3>
+          <h3 className="">Headers</h3>
           <div className="flex gap-2 w-full">
             <input
               type="text"
@@ -166,6 +173,7 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
               Add
             </button>
           </div>
+          <HeadersTable headers={formData.headers} />
           <ul className="flex flex-wrap gap-2">
             {/* Display current headers */}
             {Object.entries(formData.headers).length > 0 && (
