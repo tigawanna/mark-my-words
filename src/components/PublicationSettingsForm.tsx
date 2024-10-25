@@ -3,21 +3,23 @@ import type { PostTarget } from "../../extension/utils/config-manager.ts";
 import { vscode } from "../utils/vscode.ts";
 import "@vscode-elements/elements/dist/vscode-badge";
 import "@vscode-elements/elements/dist/vscode-button";
-import "@vscode-elements/elements/dist/vscode-single-select";
+
 import { HeadersTable } from "./HeadersTable.tsx";
+import { MethodsSelect } from "./MethodsSelect.tsx";
 interface PublicationSettingsFormProps {
   formData: PostTarget & { editing: boolean };
   setFormData: React.Dispatch<React.SetStateAction<PostTarget & { editing: boolean }>>;
 }
 
 export function PublicationSettingsForm({ formData, setFormData }: PublicationSettingsFormProps) {
+  
   const [header, setHeader] = useState<{ key: string; value: string }>({
     key: "",
     value: "",
   });
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+    console.log("formData ====>> ", formData);
     const newTarget: PostTarget = {
       ...formData,
       id: crypto.randomUUID(),
@@ -75,7 +77,7 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
     <div className="flex flex-col gap-2 h-full justify-center items-center">
       <vscode-button>Primary button</vscode-button>
       <vscode-badge variant="activity-bar-counter">uwu</vscode-badge>
-      <h2 className="text-xl font-bold">Add New Publish Target</h2>
+      <h2 className="text-xl font-bold">{formData.editing?"Edit":"Add New"} Publish Target</h2>
       <form onSubmit={handleFormSubmit} className="form">
         <div className="flex flex-col gap-2">
           <label className="form-label">
@@ -106,32 +108,8 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
         <div className="flex flex-col gap-2 w-full">
           <label className="form-label">
             Method:
-            <vscode-single-select
-              value={formData.method}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  method: e.target.value as PostTarget["method"],
-                }))
-              }
-              id="select-example">
-              <vscode-option description="POST method" value="POST">
-                POST
-              </vscode-option>
-              <vscode-option selected description="GET method" value="GET">
-                GET
-              </vscode-option>
-              <vscode-option description="PUT method" value="PUT">
-                PUT
-              </vscode-option>
-              <vscode-option description="PATCH method" value="PATCH">
-                PATCH
-              </vscode-option>
-              <vscode-option description="DELETE method" value="DELETE">
-                DELETE
-              </vscode-option>
-            </vscode-single-select>
           </label>
+          <MethodsSelect formData={formData} setFormData={setFormData}/>
         </div>
 
         {/* Headers Section */}
@@ -173,37 +151,12 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
               Add
             </button>
           </div>
-          <HeadersTable headers={formData.headers} />
-          <ul className="flex flex-wrap gap-2">
-            {/* Display current headers */}
-            {Object.entries(formData.headers).length > 0 && (
-              <div className="flex flex-wrap  gap-2 w-full">
-                {Object.entries(formData.headers).map(([key, value]) => (
-                  <div
-                    key={key}
-                    className="flex justify-center items-center px-2 gap-2 border rounded-lg">
-                    <span className="">
-                      {key}: {value}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const newHeaders = { ...formData.headers };
-                        delete newHeaders[key];
-                        setFormData((prev) => ({ ...prev, headers: newHeaders }));
-                      }}
-                      className="size-8 rounded-lg">
-                      X
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </ul>
+          <HeadersTable headers={formData.headers} setFormData={setFormData}/>
+
         </div>
 
         <button type="submit" className="submit-button">
-          Add Target
+          {formData.editing ? "Update" : "Add"} Target
         </button>
       </form>
     </div>
