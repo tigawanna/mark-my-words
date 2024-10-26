@@ -28,17 +28,7 @@ export function MethodsSelect({ formData, setFormData }: MethodsSelectProps) {
     <vscode-single-select
       ref={selectRef}
       value={formData.method}
-      onchange={(e) => {
-        console.log("==== new method   ====", e);
-      }}
-      //   onChange={(e) => {
-      //     console.log("==== new method   ====", e);
-      //     console.log("==== new method   ====", selectRef.current);
-      //     setFormData((prev) => ({
-      //       ...prev,
-      //       method: e.target.value as PostTarget["method"],
-      //     }));
-      //   }}
+      class="w-fit min-w-[100px]"
       id="select-example">
       <vscode-option description="POST method" value="POST">
         POST

@@ -5,6 +5,7 @@ import type { PostTarget } from "../extension/utils/config-manager.ts";
 import { PublicationSettingsList } from "./components/PublicationSettingsList.tsx";
 import { PublicationSettingsForm } from "./components/PublicationSettingsForm.tsx";
 import { PublishMarkdown } from "./components/PublishMArkdown.tsx";
+import { PublicationSettingsTable } from "./components/PublicationSettingsTable.tsx";
 
 function App() {
    const [selectedText, setSelectedText] = useState<string>("");
@@ -68,9 +69,10 @@ function App() {
       <h1 className="text-4xl font-bold text-start">Mark my words</h1>
         <PublishMarkdown targets={targets} selectedText={selectedText} setSelectedText={setSelectedText}/>
       <h1 className="text-xl font-bold">Publication Target Configuration</h1>
-      <div className="flex flex-col rounded-lg md:flex-row p-5 justify-evenly items-center gap-5 h-full w-full">
+      <div className="flex flex-col rounded-lg  p-5 justify-evenly items-center gap-5 h-full w-full">
         {/* Target List */}
-        <PublicationSettingsList targets={targets} setTargets={setTargets} setFormData={setFormData}/>
+        <PublicationSettingsTable targets={targets} setTargets={setTargets} setFormData={setFormData}/>
+        {/* <PublicationSettingsList targets={targets} setTargets={setTargets} setFormData={setFormData}/> */}
         {/* Add Target Form */}
         <PublicationSettingsForm formData={formData} setFormData={setFormData} />
       </div>

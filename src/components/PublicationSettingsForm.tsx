@@ -12,14 +12,13 @@ interface PublicationSettingsFormProps {
 }
 
 export function PublicationSettingsForm({ formData, setFormData }: PublicationSettingsFormProps) {
-  
   const [header, setHeader] = useState<{ key: string; value: string }>({
     key: "",
     value: "",
   });
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("formData ====>> ", formData);
+
     const newTarget: PostTarget = {
       ...formData,
       id: crypto.randomUUID(),
@@ -74,11 +73,11 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
   };
 
   return (
-    <div className="flex flex-col gap-2 h-full justify-center items-center">
-      <vscode-button>Primary button</vscode-button>
-      <vscode-badge variant="activity-bar-counter">uwu</vscode-badge>
-      <h2 className="text-xl font-bold">{formData.editing?"Edit":"Add New"} Publish Target</h2>
-      <form onSubmit={handleFormSubmit} className="form">
+    <div className="flex flex-col gap-2 h-full justify-center items-center rounded-lg ">
+      <h2 className="text-lg">{formData.editing ? "Edit" : "Add New"} Publish Target</h2>
+      <form
+        onSubmit={handleFormSubmit}
+        className="form flex flex-col gap-2 p-5 border border-vscode-editorGroup-dropBackground">
         <div className="flex flex-col gap-2">
           <label className="form-label">
             Name:
@@ -92,25 +91,21 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
           </label>
         </div>
 
-        <div className="form-group">
-          <label className="form-label">
-            Endpoint:
+        <div className="flex flex-col w-full gap-2 ">
+          <label className="form-label">Endpoint:</label>
+          <div className="flex w-full gap-2 items-center">
+            <MethodsSelect formData={formData} setFormData={setFormData} />
             <input
               type="url"
               value={formData.endpoint}
               onChange={(e) => setFormData((prev) => ({ ...prev, endpoint: e.target.value }))}
-              className="form-input"
+              className="w-full"
               required
             />
-          </label>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-2 w-full">
-          <label className="form-label">
-            Method:
-          </label>
-          <MethodsSelect formData={formData} setFormData={setFormData}/>
-        </div>
+
 
         {/* Headers Section */}
         <div className="flex flex-col gap-2 w-full">
@@ -151,8 +146,7 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
               Add
             </button>
           </div>
-          <HeadersTable headers={formData.headers} setFormData={setFormData}/>
-
+          <HeadersTable headers={formData.headers} setFormData={setFormData} />
         </div>
 
         <button type="submit" className="submit-button">
