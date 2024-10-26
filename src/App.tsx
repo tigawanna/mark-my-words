@@ -1,7 +1,8 @@
 // App.tsx
 import { useEffect } from "react";
-import { MainPublicationScreen } from "./components/publish-section/MainPublicationScreen";
 import { usePublishFormsStore } from "./store/publish-form-store";
+import { MainPublicationScreen } from "./components/old-settings-form/publish-section/MainPublicationScreen";
+import { MainContainer } from "./components/MainContainer";
 
 function App() {
   const updateFormData = usePublishFormsStore((state) => state.updateFormData);
@@ -14,11 +15,6 @@ function App() {
             updateFormData({
               content: message.data.selectedText || "",
             });
-            // setSelectedText(message.data.selectedText);
-            // setFormData((prev) => ({
-            //   ...prev,
-            //   content: message.data.selectedText || "",
-            // }));
           }
           break;
       }
@@ -29,7 +25,7 @@ function App() {
   }, []);
   return (
     <main className="w-full h-full flex flex-col justify-center items-center gap-5 p-5">
-      <MainPublicationScreen />
+      <MainContainer />
     </main>
   );
 }

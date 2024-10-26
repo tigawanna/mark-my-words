@@ -1,5 +1,5 @@
-import type { PostTarget } from "../../extension/utils/config-manager.ts.ts";
-import { vscode } from "../utils/vscode.ts";
+import type { PostTarget } from "../../../extension/utils/config-manager.ts.ts";
+import { vscode } from "../../utils/vscode.ts";
 
 interface PublicationSettingsListProps {
   targets: PostTarget[];

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import type { PostTarget } from "../../../extension/utils/config-manager.ts";
-import { vscode } from "../../utils";
-import { PublicationSettingsTable } from "../PublicationSettingsTable";
-import { PublishMarkdown } from "../PublishMarkdown";
-import { PublicationSettingsForm } from "../settings-form/PublicationSettingsForm";
+import type { PostTarget } from "../../../extension/utils/config-manager.ts.ts";
+import { vscode } from "../../utils/index.ts";
+import { PublicationSettingsTable } from "./PublicationSettingsTable.tsx";
+import { PublicationSettingsForm } from "./PublicationSettingsForm.tsx";
+import { PublishMarkdown } from "./PublishMarkdown.tsx";
 
 interface OldMainPublicationScreenProps {
 

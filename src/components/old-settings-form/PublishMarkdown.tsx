@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { PostTarget } from "../../extension/utils/config-manager.ts.ts";
 import { makeFetchRequest } from "./publish-section/api.ts";
+import type { PostTarget } from "../../../extension/utils/config-manager.ts.ts";
 
 interface PublishMarkdownProps {
   targets: PostTarget[];

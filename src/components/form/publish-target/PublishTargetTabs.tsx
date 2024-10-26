@@ -4,22 +4,17 @@ import "@vscode-elements/elements/dist/vscode-tab-header";
 import "@vscode-elements/elements/dist/vscode-tab-panel";
 import "@vscode-elements/elements/dist/vscode-scrollable";
 import "@vscode-elements/elements/dist/vscode-badge";
-import type { PostTarget } from "../../../extension/utils/config-manager.ts.ts";
-import { PublicationSettingsFormHeaders } from "./PublicationSettingsFormHeaders.tsx";
-import { PublicationSettingsFormBody } from "./PublicationSettingsFormBody.tsx";
 
-interface PublishFormSettingsTabsProps {
-  formData: PostTarget & { editing: boolean };
-  setFormData: (
-    value: React.SetStateAction<
-      PostTarget & {
-        editing: boolean;
-      }
-    >
-  ) => void;
+import { usePublishTargetsStore } from "../../../store/targets-store.ts";
+import { PublishTargetHeaders } from "./PublishTargetHeaders.tsx";
+import { PublishTargetBody } from "./PublishTargetBody.tsx";
+
+interface PublishTargetFormTabsProps {
+
 }
 // scured tab
-export function PublishFormSettingsTabs({ formData, setFormData }: PublishFormSettingsTabsProps) {
+export function PublishTargetFormTabs({  }: PublishTargetFormTabsProps) {
+     const { one_target, setOneTarget } = usePublishTargetsStore();
   return (
     <div className="w-full h-full flex flex-col items-center justify-center  p-1 rounded-md">
       <vscode-tabs selected-index={2} panel class="panel-example p-4 gap-3">
@@ -38,13 +33,13 @@ export function PublishFormSettingsTabs({ formData, setFormData }: PublishFormSe
         <vscode-tab-header slot="header">headers</vscode-tab-header>
         <vscode-tab-panel>
           <vscode-scrollable>
-            <PublicationSettingsFormHeaders headers={formData.headers} setFormData={setFormData} />
+            <PublishTargetHeaders headers={one_target.headers} setFormData={setOneTarget} />
           </vscode-scrollable>
         </vscode-tab-panel>
 
         <vscode-tab-header slot="header">Body</vscode-tab-header>
         <vscode-tab-panel>
-          <PublicationSettingsFormBody body_data={formData.body} setFormData={setFormData} />
+          <PublishTargetBody body_data={one_target.body} setFormData={setOneTarget} />
         </vscode-tab-panel>
       </vscode-tabs>
     </div>

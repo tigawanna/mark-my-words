@@ -1,4 +1,4 @@
-import { PublishSelectionForm } from "./PublishSelectionForm";
+import { PublishSelectionForm } from "../../form/PublishDetailsForm";
 
 interface MainPublicationScreenProps {
 
@@ -12,3 +12,5 @@ return (
   </div>
 );
 }
+
+

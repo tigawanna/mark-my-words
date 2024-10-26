@@ -1,11 +1,11 @@
 import "@vscode-elements/elements/dist/vscode-single-select";
 import "@vscode-elements/elements/dist/vscode-option";
-import type { PostTarget } from "../../../extension/utils/config-manager.ts.ts";
 import { useEffect, useRef } from "react";
 import type { VscodeSingleSelect } from "@vscode-elements/elements/dist/vscode-single-select";
+import { usePublishTargetsStore, type PublishTarget } from "../../../store/targets-store";
 interface MethodsSelectProps {
-  formData: PostTarget & { editing: boolean };
-  setFormData: React.Dispatch<React.SetStateAction<PostTarget & { editing: boolean }>>;
+  formData: PublishTarget;
+  setFormData: React.Dispatch<React.SetStateAction<PublishTarget>>;
 }
 
 export function MethodsSelect({ formData, setFormData }: MethodsSelectProps) {
@@ -15,8 +15,8 @@ export function MethodsSelect({ formData, setFormData }: MethodsSelectProps) {
     const selectEventListener = (_: Event) => {
       setFormData((prev) => ({
         ...prev,
-        method: select?.value as PostTarget["method"],
-      }))
+        method: select?.value as PublishTarget["method"],
+      }));
     };
     select?.addEventListener("change", selectEventListener);
     return () => {
@@ -47,4 +47,38 @@ export function MethodsSelect({ formData, setFormData }: MethodsSelectProps) {
       </vscode-option>
     </vscode-single-select>
   );
+}
+
+
+interface PublishTargetEndpointProps {
+
+}
+
+export function PublishTargetEndpoint({}:PublishTargetEndpointProps){
+  const {one_target, setOneTarget} = usePublishTargetsStore()
+return (
+  <div className="flex flex-wrap w-full gap-2 items-center p-5">
+    <div className="flex w-full gap-2 items-center">
+      <input
+        type="text"
+        value={one_target.name}
+        onChange={(e) => setOneTarget((prev) => ({ ...prev, name: e.target.value }))}
+        className="w-fit max-w-[80%] flex-grow"
+        placeholder="Name"
+        required
+      />
+      <div className="flex w-fit  gap-2 items-center">
+        <MethodsSelect formData={one_target} setFormData={setOneTarget} />
+      </div>
+    </div>
+    <input
+      type="url"
+      value={one_target.endpoint}
+      onChange={(e) => setOneTarget((prev) => ({ ...prev, endpoint: e.target.value }))}
+      className="w-full"
+      placeholder="Endpoint"
+      required
+    />
+  </div>
+);
 }

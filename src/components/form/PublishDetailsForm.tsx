@@ -1,8 +1,9 @@
 import { usePublishFormsStore } from "../../store/publish-form-store";
 
-interface PublishSelectionFormProps {}
 
-export function PublishSelectionForm({}: PublishSelectionFormProps) {
+interface PublishDetailsFormProps {}
+
+export function PublishDetailsForm({}: PublishDetailsFormProps) {
   const { formdata } = usePublishFormsStore();
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
