@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { PostTarget } from "../../extension/utils/config-manager.ts.ts";
-
+import { makeFetchRequest } from "./publish-section/api.ts";
 
 interface PublishMarkdownProps {
   targets: PostTarget[];
@@ -8,8 +8,8 @@ interface PublishMarkdownProps {
   setSelectedText: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export function PublishMarkdown({ targets,selectedText,setSelectedText }: PublishMarkdownProps) {
-  const [selectedTargets, setSelectedTargets] = useState<string[]>([]);
+export function PublishMarkdown({ targets, selectedText, setSelectedText }: PublishMarkdownProps) {
+  const [selectedTargets, setSelectedTargets] = useState<PostTarget[]>([]);
   return (
     <div className="flex w-full flex-col  justify-center items-center gap-2">
       {targets.length === 0 ? (
@@ -24,12 +24,12 @@ export function PublishMarkdown({ targets,selectedText,setSelectedText }: Publis
                   className="p-5"
                   type="checkbox"
                   value={target.id}
-                  checked={selectedTargets.includes(target.id)}
+                  checked={selectedTargets.find((t) => t.id === target.id) ? true : false}
                   onChange={() =>
                     setSelectedTargets((prev) =>
-                      prev.includes(target.id)
-                        ? prev.filter((t) => t !== target.id)
-                        : [...prev, target.id]
+                      prev.find((t) => t.id === target.id)
+                        ? prev.filter((t) => t.id !== target.id)
+                        : [...prev, target]
                     )
                   }
                 />
@@ -43,8 +43,21 @@ export function PublishMarkdown({ targets,selectedText,setSelectedText }: Publis
         </ul>
       )}
       <div className="flex w-full flex-col justify-center items-center gap-2">
-        <textarea onChange={(e) => setSelectedText(e.target.value)} value={selectedText} className="w-full p-2 rounded-xl" rows={7} />
-        <button className="">publish</button>
+        <textarea
+          onChange={(e) => setSelectedText(e.target.value)}
+          value={selectedText}
+          className="w-full p-2 rounded-xl"
+          rows={7}
+        />
+        {selectedTargets.length > 0 && (
+          <button
+            className=""
+            onClick={() => {
+              makeFetchRequest(selectedTargets?.[0]);
+            }}>
+            publish
+          </button>
+        )}
       </div>
     </div>
   );

@@ -31,7 +31,7 @@ export function PublicationSettingsFormBody({
     setFormData((prev) => {
       return {
         ...prev,
-        bodys: {
+        body: {
           ...prev.body,
           [body.key]: body.value,
         },
@@ -78,7 +78,7 @@ export function PublicationSettingsFormBody({
         </button>
       </div>
 
-      <vscode-table
+{body_data&&      <vscode-table
         class="responsive-example zebra bordered-row"
         bordered-columns
         zebra
@@ -137,7 +137,7 @@ export function PublicationSettingsFormBody({
           })}
           <vscode-table-row></vscode-table-row>
         </vscode-table-body>
-      </vscode-table>
+      </vscode-table>}
     </div>
   );
 }

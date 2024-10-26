@@ -1,11 +1,15 @@
 import type { PostTarget } from "../../../extension/utils/config-manager.ts";
 
 export async function makeFetchRequest(target: PostTarget) {
-  const res = await fetch(target.endpoint, {
-    method: target.method,
-    headers: target.headers,
-    body: JSON.stringify(target.body),
-  });
+    const res = await fetch(target.endpoint, {
+      method: target.method,
+      headers: {
+        "Accept": "*/*",
+        "Content-Type": "application/json",
+        ...target.headers,
+      },
+      body: JSON.stringify(target.body),
+    });
   if (!res.ok) {
     throw new Error(res.statusText);
   }
