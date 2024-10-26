@@ -7,7 +7,7 @@ export interface PostTarget {
     endpoint: string;
     method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
     headers: Record<string, string>;
-    body?:Record<string, string>;
+    body:Record<string, string>;
 }
 
 export class ConfigurationManager {
