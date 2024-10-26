@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist, createJSONStorage } from "zustand/middleware";
 import { vscode } from "../utils";
+import { getNestedProperty } from "../utils/object-helpers";
 
 export interface PublishTarget {
   id: string;
@@ -71,8 +72,7 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
             const mappings = value.split(",");
             const mappingFrom = mappings[0].split(".");
             const mappingTo = mappings[1].split(".");
-            const  mappingFromValues = state[mappingFrom[0]][mappingFrom[1]];
-
+            const mappingFromValues = getNestedProperty(state.oneTarget, mappingFrom[0])
             const newTarget = { ...state.oneTarget,
               [mappingTo[0]]: {
                 [mappingTo[1]]: mappingFromValues
