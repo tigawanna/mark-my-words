@@ -2,7 +2,6 @@
 import { vscode } from "./utils/vscode";
 import { useEffect, useState } from "react";
 import type { PostTarget } from "../extension/utils/config-manager.ts";
-import { PublicationSettingsList } from "./components/PublicationSettingsList.tsx";
 import { PublicationSettingsForm } from "./components/PublicationSettingsForm.tsx";
 import { PublishMarkdown } from "./components/PublishMArkdown.tsx";
 import { PublicationSettingsTable } from "./components/PublicationSettingsTable.tsx";
