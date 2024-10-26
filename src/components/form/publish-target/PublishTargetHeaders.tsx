@@ -10,28 +10,18 @@ import { useState } from "react";
 import type { PublishTarget } from "../../../store/targets-store";
 interface PublishTargetHeadersProps {
   headers: Record<string, string>;
-  setFormData: (
-    value: React.SetStateAction<PublishTarget>) => void;
+  setFormHeaders: (value: PublishTarget["headers"]) => void;
 }
 
-export function PublishTargetHeaders({
-  headers,
-  setFormData,
-}: PublishTargetHeadersProps) {
+export function PublishTargetHeaders({ headers, setFormHeaders }: PublishTargetHeadersProps) {
   const [editing, setEditing] = useState(false);
   const [header, setHeader] = useState<{ key: string; value: string }>({
     key: "",
     value: "",
   });
   const handleAddHeader = (header: { key: string; value: string }) => {
-    setFormData((prev) => {
-      return {
-        ...prev,
-        headers: {
-          ...prev.headers,
-          [header.key]: header.value,
-        },
-      };
+    setFormHeaders({
+      [header.key]: header.value,
     });
     setHeader({
       key: "",
@@ -98,11 +88,12 @@ export function PublishTargetHeaders({
                           name="check"
                           class="hover:text-vscode-list-focusForeground hover:outline p-1 hover:outline-vscode-focusBorder"
                           onClick={() => {
-                            setFormData((prev) => {
-                              const newHeaders = { ...prev.headers };
-                              newHeaders[key] = header.value;
-                              return { ...prev, headers: newHeaders };
-                            });
+                            // setFormHeaders((prev) => {
+                            //   const newHeaders = { ...prev.headers };
+                            //   newHeaders[key] = header.value;
+                            //   return { ...prev, headers: newHeaders };
+                            // });
+                            setFormHeaders({ ...headers, [key]: value });
                             setHeader({ key: "", value: "" });
                             setEditing(false);
                           }}></vscode-icon>
@@ -119,11 +110,14 @@ export function PublishTargetHeaders({
                         name="chrome-close"
                         class="hover:text-vscode-errorForeground hover:outline p-1 hover:outline-vscode-errorForeground"
                         onClick={() => {
-                          setFormData((prev) => {
-                            const newHeaders = { ...prev.headers };
+                          // setFormHeaders((prev) => {
+                          //   const newHeaders = { ...prev.headers };
+                          //   delete newHeaders[key];
+                          //   return { ...prev, headers: newHeaders };
+                          // });
+                            const newHeaders = { ...headers };
                             delete newHeaders[key];
-                            return { ...prev, headers: newHeaders };
-                          });
+                          setFormHeaders(newHeaders);
                         }}></vscode-icon>
                     </div>
                   </div>

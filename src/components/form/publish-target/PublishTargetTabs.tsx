@@ -8,13 +8,12 @@ import "@vscode-elements/elements/dist/vscode-badge";
 import { usePublishTargetsStore } from "../../../store/targets-store.ts";
 import { PublishTargetHeaders } from "./PublishTargetHeaders.tsx";
 import { PublishTargetBody } from "./PublishTargetBody.tsx";
+import { PublishTargetAuthForm } from "./PublishTargetAuthForm.tsx";
 
-interface PublishTargetFormTabsProps {
-
-}
+interface PublishTargetFormTabsProps {}
 // scured tab
-export function PublishTargetFormTabs({  }: PublishTargetFormTabsProps) {
-     const { one_target, setOneTarget } = usePublishTargetsStore();
+export function PublishTargetFormTabs({}: PublishTargetFormTabsProps) {
+  const { oneTarget, setOneTarget } = usePublishTargetsStore();
   return (
     <div className="w-full h-full flex flex-col items-center justify-center  p-1 rounded-md">
       <vscode-tabs selected-index={2} panel class="panel-example p-4 gap-3">
@@ -33,13 +32,26 @@ export function PublishTargetFormTabs({  }: PublishTargetFormTabsProps) {
         <vscode-tab-header slot="header">headers</vscode-tab-header>
         <vscode-tab-panel>
           <vscode-scrollable>
-            <PublishTargetHeaders headers={one_target.headers} setFormData={setOneTarget} />
+            <PublishTargetHeaders
+              headers={oneTarget.headers}
+              setFormHeaders={(value) => setOneTarget({ ...oneTarget, headers: value })}
+            />
           </vscode-scrollable>
         </vscode-tab-panel>
 
         <vscode-tab-header slot="header">Body</vscode-tab-header>
         <vscode-tab-panel>
-          <PublishTargetBody body_data={one_target.body} setFormData={setOneTarget} />
+          <PublishTargetBody
+            body_data={oneTarget.body}
+            setFormBody={(value) => setOneTarget({ ...oneTarget, body: value })}
+          />
+        </vscode-tab-panel>
+        <vscode-tab-header slot="header">auth</vscode-tab-header>
+        <vscode-tab-panel>
+          <vscode-scrollable>
+            <PublishTargetAuthForm
+            />
+          </vscode-scrollable>
         </vscode-tab-panel>
       </vscode-tabs>
     </div>

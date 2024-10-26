@@ -8,23 +8,23 @@ import "@vscode-elements/elements/dist/vscode-table-cell";
 
 import { useState } from "react";
 import type { PublishTarget } from "../../../store/targets-store";
-interface PublishTargetBodyProps {
-  body_data: Record<string, string>;
-  setFormBody: (value:PublishTarget["body"]) => void;
+interface PublishTargetMappingsProps {
+  mappings: Record<string, string>;
+  setFormMappings: (value:PublishTarget["mappings"]) => void;
 }
 
-export function PublishTargetBody({
-  body_data,
-  setFormBody,
-}: PublishTargetBodyProps) {
+export function PublishTargetMappings({
+  mappings,
+  setFormMappings,
+}: PublishTargetMappingsProps) {
   const [editing, setEditing] = useState(false);
   const [keyValue, setKeyValue] = useState<{ key: string; value: string }>({
     key: "",
     value: "",
   });
   const handleAddBodyItem = (body: { key: string; value: string }) => {
-    setFormBody({
-      ...body_data,
+    setFormMappings({
+      ...mappings,
       [body.key]: body.value,
     })
     setKeyValue({
@@ -68,7 +68,7 @@ export function PublishTargetBody({
         </button>
       </div>
 
-{body_data&&      <vscode-table
+{mappings&&      <vscode-table
         class="responsive-example zebra bordered-row"
         bordered-columns
         zebra
@@ -79,7 +79,7 @@ export function PublishTargetBody({
           <vscode-table-header-cell>Value</vscode-table-header-cell>
         </vscode-table-header>
         <vscode-table-body slot="body">
-          {Object.entries(body_data).map(([key, value]) => {
+          {Object.entries(mappings).map(([key, value]) => {
             return (
               <vscode-table-row key={key}>
                 <vscode-table-cell>{key}</vscode-table-cell>
@@ -92,13 +92,8 @@ export function PublishTargetBody({
                           name="check"
                           class="hover:text-vscode-list-focusForeground hover:outline p-1 hover:outline-vscode-focusBorder"
                           onClick={() => {
-                            // setFormBody((prev) => {
-                            //   const newBody = { ...prev.body };
-                            //   newBody[key] = keyValue.value;
-                            //   return { ...prev, body: newBody };
-                            // })
-                            setFormBody({
-                              ...body_data,
+                            setFormMappings({
+                              ...mappings,
                               [key]: keyValue.value
                             })
                             setKeyValue({ key: "", value: "" });
@@ -117,14 +112,9 @@ export function PublishTargetBody({
                         name="chrome-close"
                         class="hover:text-vscode-errorForeground hover:outline p-1 hover:outline-vscode-errorForeground"
                         onClick={() => {
-                          // setFormBody((prev) => {
-                          //   const newBody = { ...prev.body };
-                          //   delete newBody[key];
-                          //   return { ...prev, body: newBody };
-                          // });
-                          const newBody = { ...body_data }; 
+                          const newBody = { ...mappings }; 
                           delete newBody[key];
-                          setFormBody(newBody);
+                          setFormMappings(newBody);
                         }}></vscode-icon>
                     </div>
                   </div>

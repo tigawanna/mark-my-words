@@ -2,21 +2,22 @@ import "@vscode-elements/elements/dist/vscode-single-select";
 import "@vscode-elements/elements/dist/vscode-option";
 import { useEffect, useRef } from "react";
 import type { VscodeSingleSelect } from "@vscode-elements/elements/dist/vscode-single-select";
-import { usePublishTargetsStore, type PublishTarget } from "../../../store/targets-store";
+import { type PublishTarget } from "../../../store/targets-store";
 interface MethodsSelectProps {
-  formData: PublishTarget;
-  setFormData: React.Dispatch<React.SetStateAction<PublishTarget>>;
+  method: PublishTarget["method"];
+  setMethod: (value: PublishTarget["method"]) => void;
 }
 
-export function MethodsSelect({ formData, setFormData }: MethodsSelectProps) {
+export function MethodsSelect({ method, setMethod }: MethodsSelectProps) {
   const selectRef = useRef<VscodeSingleSelect>(null);
   useEffect(() => {
     const select = selectRef?.current;
     const selectEventListener = (_: Event) => {
-      setFormData((prev) => ({
-        ...prev,
-        method: select?.value as PublishTarget["method"],
-      }));
+      setMethod(select?.value as PublishTarget["method"]);
+      // setFormData((prev) => ({
+      //   ...prev,
+      //   method: select?.value as PublishTarget["method"],
+      // }));
     };
     select?.addEventListener("change", selectEventListener);
     return () => {
@@ -27,7 +28,7 @@ export function MethodsSelect({ formData, setFormData }: MethodsSelectProps) {
   return (
     <vscode-single-select
       ref={selectRef}
-      value={formData.method}
+      value={method}
       class="w-fit min-w-[100px]"
       id="select-example">
       <vscode-option description="POST method" value="POST">
@@ -49,36 +50,41 @@ export function MethodsSelect({ formData, setFormData }: MethodsSelectProps) {
   );
 }
 
+type Endpoint = Pick<PublishTarget, "name" | "endpoint" | "method"> &
+  Partial<Pick<PublishTarget, "headers" | "body">>;
 
 interface PublishTargetEndpointProps {
-
+  endpoint: Endpoint;
+  setEndpoint: (value: Partial<PublishTarget>) => void;
 }
 
-export function PublishTargetEndpoint({}:PublishTargetEndpointProps){
-  const {one_target, setOneTarget} = usePublishTargetsStore()
-return (
-  <div className="flex flex-wrap w-full gap-2 items-center p-5">
-    <div className="flex w-full gap-2 items-center">
+export function PublishTargetEndpoint({ endpoint, setEndpoint }: PublishTargetEndpointProps) {
+  return (
+    <div className="flex flex-wrap w-full gap-2 items-center p-5">
+      <div className="flex w-full gap-2 items-center">
+        <input
+          type="text"
+          value={endpoint.name}
+          onChange={(e) => setEndpoint({ name: e.target.value })}
+          className="w-fit max-w-[80%] flex-grow"
+          placeholder="Name"
+          required
+        />
+        <div className="flex w-fit  gap-2 items-center">
+          <MethodsSelect
+            method={endpoint.method}
+            setMethod={(value) => setEndpoint({ method: value })}
+          />
+        </div>
+      </div>
       <input
-        type="text"
-        value={one_target.name}
-        onChange={(e) => setOneTarget((prev) => ({ ...prev, name: e.target.value }))}
-        className="w-fit max-w-[80%] flex-grow"
-        placeholder="Name"
+        type="url"
+        value={endpoint.endpoint}
+        onChange={(e) => setEndpoint({ endpoint: e.target.value })}
+        className="w-full"
+        placeholder="Endpoint"
         required
       />
-      <div className="flex w-fit  gap-2 items-center">
-        <MethodsSelect formData={one_target} setFormData={setOneTarget} />
-      </div>
     </div>
-    <input
-      type="url"
-      value={one_target.endpoint}
-      onChange={(e) => setOneTarget((prev) => ({ ...prev, endpoint: e.target.value }))}
-      className="w-full"
-      placeholder="Endpoint"
-      required
-    />
-  </div>
-);
+  );
 }
