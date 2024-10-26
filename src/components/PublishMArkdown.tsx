@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { PostTarget } from "../../extension/utils/config-manager.ts.ts";
-import { vscode } from "../utils/vscode.ts";
+
 
 interface PublishMarkdownProps {
   targets: PostTarget[];

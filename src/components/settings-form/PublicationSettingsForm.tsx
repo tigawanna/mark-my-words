@@ -1,11 +1,11 @@
 import { useState } from "react";
-import type { PostTarget } from "../../extension/utils/config-manager.ts";
-import { vscode } from "../utils/vscode.ts";
+import type { PostTarget } from "../../../extension/utils/config-manager.ts.ts";
+import { vscode } from "../../utils/vscode.ts";
 import "@vscode-elements/elements/dist/vscode-badge";
 import "@vscode-elements/elements/dist/vscode-button";
 
-import { HeadersTable } from "./HeadersTable.tsx";
-import { MethodsSelect } from "./MethodsSelect.tsx";
+import { HeadersTable } from "./PublicationSettingsFormHeadersTable.tsx";
+import { MethodsSelect } from "./PublicationSettingsFormMethodsSelect.tsx";
 interface PublicationSettingsFormProps {
   formData: PostTarget & { editing: boolean };
   setFormData: React.Dispatch<React.SetStateAction<PostTarget & { editing: boolean }>>;
@@ -78,33 +78,28 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
       <form
         onSubmit={handleFormSubmit}
         className="form flex flex-col gap-2 p-5 border border-vscode-editorGroup-dropBackground">
-        <div className="flex flex-col gap-2">
-          <label className="form-label">
-            Name:
+
+
+
+          <div className="flex w-full gap-2 items-center">
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-              className="form-input"
+              className="w-fit"
+              placeholder="Name"
               required
             />
-          </label>
-        </div>
-
-        <div className="flex flex-col w-full gap-2 ">
-          <label className="form-label">Endpoint:</label>
-          <div className="flex w-full gap-2 items-center">
             <MethodsSelect formData={formData} setFormData={setFormData} />
             <input
               type="url"
               value={formData.endpoint}
               onChange={(e) => setFormData((prev) => ({ ...prev, endpoint: e.target.value }))}
               className="w-full"
+              placeholder="Endpoint"
               required
             />
           </div>
-        </div>
-
 
 
         {/* Headers Section */}
@@ -142,7 +137,7 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
             <button
               type="button"
               onClick={() => handleAddHeader(header)}
-              className="add-header-button">
+              className="w-fit min-w-[10%]">
               Add
             </button>
           </div>

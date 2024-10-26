@@ -1,6 +1,6 @@
 import "@vscode-elements/elements/dist/vscode-single-select";
 import "@vscode-elements/elements/dist/vscode-option";
-import type { PostTarget } from "../../extension/utils/config-manager.ts";
+import type { PostTarget } from "../../../extension/utils/config-manager.ts";
 import { useEffect, useRef } from "react";
 import type { VscodeSingleSelect } from "@vscode-elements/elements/dist/vscode-single-select";
 interface MethodsSelectProps {

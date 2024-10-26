@@ -5,7 +5,7 @@ import "@vscode-elements/elements/dist/vscode-table-header-cell";
 import "@vscode-elements/elements/dist/vscode-table-body";
 import "@vscode-elements/elements/dist/vscode-table-row";
 import "@vscode-elements/elements/dist/vscode-table-cell";
-import type { PostTarget } from "../../extension/utils/config-manager.ts";
+import type { PostTarget } from "../../../extension/utils/config-manager.ts";
 interface HeadersTableProps {
 headers: Record<string, string>;
   setFormData: (
