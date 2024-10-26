@@ -43,7 +43,7 @@ export function PublicationSettingsFormHeaders({
     });
   };
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 p-5">
       <div className="flex gap-2 w-full">
         <input
           type="text"
@@ -91,7 +91,7 @@ export function PublicationSettingsFormHeaders({
         <vscode-table-body slot="body">
           {Object.entries(headers).map(([key, value]) => {
             return (
-              <vscode-table-row>
+              <vscode-table-row key={key}>
                 <vscode-table-cell>{key}</vscode-table-cell>
                 <vscode-table-cell>
                   <div className="flex w-full items-center justify-between">
@@ -106,7 +106,7 @@ export function PublicationSettingsFormHeaders({
                               const newHeaders = { ...prev.headers };
                               newHeaders[key] = header.value;
                               return { ...prev, headers: newHeaders };
-                            })
+                            });
                             setHeader({ key: "", value: "" });
                             setEditing(false);
                           }}></vscode-icon>

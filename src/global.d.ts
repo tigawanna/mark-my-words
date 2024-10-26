@@ -15,6 +15,7 @@ import {
   VscodeTableBody,
   VscodeTableRow,
   VscodeTableCell,
+  VscodeScrollable
 
 } from "@vscode-elements/elements";
 
@@ -37,6 +38,7 @@ declare global {
       ["vscode-table-body"]: CustomElement<VscodeTableBody>;
       ["vscode-table-row"]: CustomElement<VscodeTableRow>;
       ["vscode-table-cell"]: CustomElement<VscodeTableCell>;
+      ["vscode-scrollable"]: CustomElement<VscodeScrollable>;
     }
   }
 }
