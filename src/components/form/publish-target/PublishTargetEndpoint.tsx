@@ -59,13 +59,14 @@ interface PublishTargetEndpointProps {
 }
 
 export function PublishTargetEndpoint({ endpoint, setEndpoint }: PublishTargetEndpointProps) {
+  // console.log("endpoint", endpoint);
   return (
     <div className="flex flex-wrap w-full gap-2 items-center p-5">
       <div className="flex w-full gap-2 items-center">
         <input
           type="text"
           value={endpoint.name}
-          onChange={(e) => setEndpoint({ name: e.target.value })}
+          onChange={(e) => setEndpoint({ ...endpoint, name: e.target.value })}
           className="w-fit max-w-[80%] flex-grow"
           placeholder="Name"
           required
@@ -73,14 +74,14 @@ export function PublishTargetEndpoint({ endpoint, setEndpoint }: PublishTargetEn
         <div className="flex w-fit  gap-2 items-center">
           <MethodsSelect
             method={endpoint.method}
-            setMethod={(value) => setEndpoint({ method: value })}
+            setMethod={(value) => setEndpoint({ ...endpoint, method: value })}
           />
         </div>
       </div>
       <input
         type="url"
         value={endpoint.endpoint}
-        onChange={(e) => setEndpoint({ endpoint: e.target.value })}
+        onChange={(e) => setEndpoint({ ...endpoint, endpoint: e.target.value })}
         className="w-full"
         placeholder="Endpoint"
         required

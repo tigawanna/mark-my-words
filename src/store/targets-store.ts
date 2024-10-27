@@ -30,7 +30,7 @@ export interface PublishTarget {
 type PublishTargetsState = {
   oneTarget: PublishTarget;
   setOneTarget: (value: Partial<PublishTarget>) => void;
-  setOneTargetAuth: (value: Partial<PublishTarget["auth"]>) => void;
+  setOneTargetAuth: (value: Partial<PublishTarget["auth"]>) => void
   targets: PublishTarget[];
   addTarget: (target: PublishTarget) => void;
   updateTarget: (targetId: string, updatedTarget: PublishTarget) => void;
