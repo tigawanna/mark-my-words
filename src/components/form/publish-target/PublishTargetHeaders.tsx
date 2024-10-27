@@ -29,7 +29,7 @@ export function PublishTargetHeaders({ headers, setFormHeaders }: PublishTargetH
     });
   };
   return (
-    <div className="flex flex-col gap-2 p-5">
+    <div className="flex flex-col gap-2 w-full">
       <div className="flex gap-2 w-full">
         <input
           type="text"

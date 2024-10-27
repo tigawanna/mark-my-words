@@ -16,36 +16,18 @@ type PublishFormsState = {
 
 export const usePublishFormsStore = create<PublishFormsState>()(
   devtools(
-    persist(
-      (set) => ({
-        formdata: {title:"",description:"",content:""},
-        updateFormData: (updatedTarget: Partial<PublishForm>) => {
-          set((state) => ({
-            formdata: { ...state.formdata, ...updatedTarget },
-          }));
-        },
-        clearFormData: () => {
-          set(() => ({
-            formdata: {title:"",description:"",content:""},
-          }));
-        }
-      }),
-      {
-        name: "publish-fprmdata",
-        storage: createJSONStorage(() => {
-          return {
-            getItem(name) {
-              return vscode.getState()[name];
-            },
-            setItem(name, value) {
-              return vscode.setState({ [name]: value });
-            },
-            removeItem(name) {
-              return vscode.setState({ [name]: undefined });
-            },
-          };
-        }),
+    (set) => ({
+      formdata: {title:"",description:"",content:""},
+      updateFormData: (updatedTarget: Partial<PublishForm>) => {
+        set((state) => ({
+          formdata: { ...state.formdata, ...updatedTarget },
+        }));
+      },
+      clearFormData: () => {
+        set(() => ({
+          formdata: {title:"",description:"",content:""},
+        }));
       }
-    )
+    })
   )
 );

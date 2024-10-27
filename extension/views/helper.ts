@@ -12,7 +12,7 @@ export class WebviewHelper {
       (message: any) => {
         const type = message.type;
         const data = message.data;
-        console.log(`type: ${type}`);
+        // console.log("=========================== ", type, data);
         switch (type) {
           case 'hello':
             window.showInformationMessage(data);

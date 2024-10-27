@@ -1,67 +1,58 @@
-// MainPanel.ts
-import { Disposable, ExtensionContext, ViewColumn, WebviewPanel, window } from "vscode";
+import {
+  Disposable,
+  ExtensionContext,
+  TextEditorSelectionChangeEvent,
+  ViewColumn,
+  WebviewPanel,
+  window,
+} from "vscode";
 import { WebviewHelper } from "./helper";
-import { ConfigurationManager } from "../utils/config-manager.ts";
-
 
 export class MainPanel {
   public static currentPanel: MainPanel | undefined;
   private readonly _panel: WebviewPanel;
   public publicPanel: WebviewPanel;
   private _disposables: Disposable[] = [];
+  private _selectionChangeListener: Disposable | undefined;
+  private _initialText: string;
 
-  private constructor(panel: WebviewPanel, context: ExtensionContext) {
+  private constructor(panel: WebviewPanel, context: ExtensionContext, initialText: string) {
     this._panel = panel;
     this.publicPanel = panel;
+    this._initialText = initialText;
+
+    // Set up disposal handling
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
 
+    // Initialize the webview content
     this._panel.webview.html = WebviewHelper.setupHtml(this._panel.webview, context);
+
+    // Set up selection change listener
+    this._selectionChangeListener = window.onDidChangeTextEditorSelection(
+      this._handleSelectionChange.bind(this)
+    );
+    this._disposables.push(this._selectionChangeListener);
 
     // Setup message handling
     this._panel.webview.onDidReceiveMessage(
       async (message) => {
+        // console.log("Sending initial text:", this._initialText); // Debug log
         switch (message.type) {
           case "ready":
-            const targets = ConfigurationManager.getPostTargets();
-            await this._panel.webview.postMessage({
-              type: "initialData",
-              data: {
-                // selectedText,
-                targets,
-              },
-            });
-            break;
-
-          case "getTargets":
-            const currentTargets = ConfigurationManager.getPostTargets();
-            await this._panel.webview.postMessage({
-              type: "targetsLoaded",
-              data: currentTargets,
-            });
-            break;
-
-          case "addTarget":
-            await ConfigurationManager.addPostTarget(message.data);
-            await this._panel.webview.postMessage({
-              type: "targetAdded",
-              data: message.data,
-            });
-            break;
-
-          case "updateTarget":
-            await ConfigurationManager.updatePostTarget(message.data.id, message.data.target);
-            await this._panel.webview.postMessage({
-              type: "targetUpdated",
-              data: message.data.target,
-            });
-            break;
-
-          case "deleteTarget":
-            await ConfigurationManager.deletePostTarget(message.data);
-            await this._panel.webview.postMessage({
-              type: "targetDeleted",
-              data: message.data,
-            });
+            console.log("============  ready  ============");
+            // Send initial text when webview is ready
+            if (this._initialText.length > 0) {
+              try {
+                await this._panel.webview.postMessage({
+                  type: "selectedText",
+                  data: {
+                    selectedText: this._initialText,
+                  },
+                });
+              } catch (error) {
+                console.error("Error sending initial text:", error);
+              }
+            }
             break;
         }
       },
@@ -70,38 +61,55 @@ export class MainPanel {
     );
   }
 
+  private async _handleSelectionChange(event: TextEditorSelectionChangeEvent) {
+    if (this._panel) {
+      const selectedText = this._getCurrentSelectedText();
+      try {
+        await this._panel.webview.postMessage({
+          type: "selectionChanged",
+          data: {
+            selectedText,
+          },
+        });
+      } catch (error:any) {
+        console.error("Error sending selection change:", error);
+        window.showErrorMessage("Error sending selection change: ");
+      }
+    }
+  }
+
+  private _getCurrentSelectedText(): string {
+    const editor = window.activeTextEditor;
+    const selection = editor?.selection;
+    return editor?.document?.getText(selection) || "";
+  }
+
   public static async render(context: ExtensionContext) {
     const editor = window.activeTextEditor;
     const selection = editor?.selection;
     const selectedText = editor?.document?.getText(selection) || "";
 
-    const immediate_message = {
-      selectedText,
-      targets: ConfigurationManager.getPostTargets(),
-    };
-
-    const panel = window.createWebviewPanel("markMyWords", "Mark My Words", ViewColumn.One, {
+    const panel = window.createWebviewPanel("markMyWords", "Mark My Words", ViewColumn.Beside, {
       enableScripts: true,
       retainContextWhenHidden: true,
-    });
-    //  send initial data
-    await panel.webview.postMessage({
-      type: "immediate",
-      data: immediate_message,
     });
 
     // Dispose the old panel if it exists to avoid multiple instances
     if (MainPanel.currentPanel) {
       MainPanel.currentPanel.dispose();
     }
-    MainPanel.currentPanel = new MainPanel(panel, context);
-    // Post a message to the webview immediately after creating it
+
+    MainPanel.currentPanel = new MainPanel(panel, context, selectedText);
   }
 
   public dispose() {
     MainPanel.currentPanel = undefined;
+
+    if (this._selectionChangeListener) {
+      this._selectionChangeListener.dispose();
+    }
+
     this._panel.dispose();
-    // SelectionStore.clear(); // Clear the store when panel is disposed
 
     while (this._disposables.length) {
       const disposable = this._disposables.pop();
@@ -110,5 +118,4 @@ export class MainPanel {
       }
     }
   }
-
 }

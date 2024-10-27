@@ -15,8 +15,8 @@ interface PublishTargetFormTabsProps {}
 export function PublishTargetFormTabs({}: PublishTargetFormTabsProps) {
   const { oneTarget, setOneTarget } = usePublishTargetsStore();
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center  p-1 rounded-md">
-      <vscode-tabs selected-index={2} panel class="panel-example p-4 gap-3">
+    <div className="w-full h-full flex flex-col items-center justify-center  rounded-md">
+      <vscode-tabs selected-index={2} panel class="panel-example  gap-3">
         <vscode-icon
           label="Maximize Panel Size"
           title="Maximize Panel Size"

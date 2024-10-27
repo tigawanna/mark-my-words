@@ -61,7 +61,7 @@ interface PublishTargetEndpointProps {
 export function PublishTargetEndpoint({ endpoint, setEndpoint }: PublishTargetEndpointProps) {
   // console.log("endpoint", endpoint);
   return (
-    <div className="flex flex-wrap w-full gap-2 items-center p-5">
+    <div className="flex flex-wrap w-full gap-2 p-2 items-center">
       <div className="flex w-full gap-2 items-center">
         <input
           type="text"
