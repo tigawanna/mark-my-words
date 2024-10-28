@@ -12,6 +12,30 @@
 
   <body>
     <div id="app"></div>
+    <!-- <script type="module">
+      import { usePublishFormsStore } from "./src/store/publish-form-store";
+      import { extractTitleAndDescription } from "./src/utils/object-helpers";
+     const updateFormData = usePublishFormsStore.getState().updateFormData
+      window.addEventListener("message", (event) => {
+        console.log("message readable from the script level", event.data);
+        const message = event.data;
+      switch (message.type) {
+        case "selectedText":
+        case "selectionChanged":
+          if (message.data && message.data.selectedText && message.data.selectedText.length > 1) {
+            const inferredLabels = extractTitleAndDescription(message.data.selectedText);
+            if (inferredLabels) {
+              updateFormData({
+                content: inferredLabels.content,
+                title: inferredLabels.title,
+                description: inferredLabels.description,
+              });
+            }
+          }
+          break;
+      }
+      })
+    </script> -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

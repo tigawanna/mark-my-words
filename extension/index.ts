@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { commands, ExtensionContext } from "vscode";
-import { MainPanel } from "./views/configure-panel";
+import { MainPanel } from "./views/main-panel";
 import { SelectionStore } from "./stores/selection-strore";
 
 interface PostTarget {

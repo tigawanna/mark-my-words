@@ -8,19 +8,19 @@ export class WebviewHelper {
   }
 
   public static setupWebviewHooks(webview: Webview, disposables: Disposable[]) {
-    webview.onDidReceiveMessage(
-      (message: any) => {
-        const type = message.type;
-        const data = message.data;
-        // console.log("=========================== ", type, data);
-        switch (type) {
-          case 'hello':
-            window.showInformationMessage(data);
-            return;
-        }
-      },
-      undefined,
-      disposables,
-    );
+    // webview.onDidReceiveMessage(
+    //   (message: any) => {
+    //     const type = message.type;
+    //     const data = message.data;
+    //     // console.log("=========================== ", type, data);
+    //     switch (type) {
+    //       case 'hello':
+    //         window.showInformationMessage(data);
+    //         return;
+    //     }
+    //   },
+    //   undefined,
+    //   disposables,
+    // );
   }
 }

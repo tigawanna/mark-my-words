@@ -36,11 +36,8 @@ export class MainPanel {
     // Setup message handling
     this._panel.webview.onDidReceiveMessage(
       async (message) => {
-        // console.log("Sending initial text:", this._initialText); // Debug log
         switch (message.type) {
           case "ready":
-            console.log("============  ready  ============");
-            // Send initial text when webview is ready
             if (this._initialText.length > 0) {
               try {
                 await this._panel.webview.postMessage({
@@ -91,7 +88,6 @@ export class MainPanel {
 
     const panel = window.createWebviewPanel("markMyWords", "Mark My Words", ViewColumn.Beside, {
       enableScripts: true,
-      retainContextWhenHidden: true,
     });
 
     // Dispose the old panel if it exists to avoid multiple instances
@@ -100,6 +96,11 @@ export class MainPanel {
     }
 
     MainPanel.currentPanel = new MainPanel(panel, context, selectedText);
+      await MainPanel.currentPanel._panel.webview.postMessage({
+        type: "initialSelectedText",
+        data: selectedText,
+      });
+
   }
 
   public dispose() {
