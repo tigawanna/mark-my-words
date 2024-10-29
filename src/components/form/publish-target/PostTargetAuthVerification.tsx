@@ -28,6 +28,7 @@ export function PostTargetAuthVerification({
     <div className={""}>verification endpoint</div>
       <PublishTargetEndpoint
         endpoint={{
+          baseUrl: oneTarget?.baseUrl ?? "https://example.com",
           name: oneTarget?.auth?.verification.name ?? "auth",
           endpoint: oneTarget?.auth?.verification.endpoint ?? "https://example.com",
           method: oneTarget?.auth?.verification.method ?? "POST",

@@ -38,3 +38,15 @@ export function extractTitleAndDescription(content: string) {
     .join("\n");
   return { ...inferredLabels, content: linesWithoutTitleAndDescription };
 }
+
+
+export function addBaseUrlToUrl(url: string, baseUrl?: string) {
+  if(!baseUrl) {
+    return url;
+  }
+  if (url.trim().startsWith("http")) {
+    return url;
+  }
+
+  return `${baseUrl.replace(/\/$/, "").trim()}/${url.replace(/^\//, "").trim()}`;
+}

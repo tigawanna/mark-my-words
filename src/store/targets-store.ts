@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist, createJSONStorage } from "zustand/middleware";
 import { vscode } from "../utils";
-import { getNestedProperty } from "../utils/object-helpers";
+import { getNestedProperty } from "../utils/helpers";
 
 export interface PublishTarget {
   id: string;

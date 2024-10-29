@@ -9,7 +9,7 @@ import { PublishTargetBody } from "./PublishTargetBody";
 import { PublishTargetHeaders } from "./PublishTargetHeaders";
 import { usePublishTargetsStore, type PublishTarget } from "../../../store/targets-store";
 import { PublishTargetEndpoint } from "./PublishTargetEndpoint";
-import { getNestedProperty } from "../../../utils/object-helpers";
+import { getNestedProperty } from "../../../utils/helpers";
 import { PostTargetAuthVerification } from "./PostTargetAuthVerification";
 
 interface PublishTargetAuthFormProps {}
@@ -23,12 +23,12 @@ export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
         <div className={""}>auth endpoint</div>
         <PublishTargetEndpoint
           endpoint={{
+            baseUrl: oneTarget?.baseUrl ?? "https://example.com",
             name: oneTarget?.auth?.name ?? "auth",
             endpoint: oneTarget?.auth?.endpoint ?? "https://example.com",
             method: oneTarget?.auth?.method ?? "POST",
           }}
           setEndpoint={(value) => {
-            console.log("setEndpoint value== ", value);
             setOneTargetAuth({
               ...oneTarget.auth,
               name: value?.name,

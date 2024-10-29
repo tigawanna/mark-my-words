@@ -3,6 +3,7 @@ import "@vscode-elements/elements/dist/vscode-option";
 import { useEffect, useRef } from "react";
 import type { VscodeSingleSelect } from "@vscode-elements/elements/dist/vscode-single-select";
 import { type PublishTarget } from "../../../store/targets-store";
+import { addBaseUrlToUrl } from "@/utils/helpers";
 interface MethodsSelectProps {
   method: PublishTarget["method"];
   setMethod: (value: PublishTarget["method"]) => void;
@@ -14,11 +15,7 @@ export function MethodsSelect({ method, setMethod }: MethodsSelectProps) {
     const select = selectRef?.current;
     const selectEventListener = (_: Event) => {
       setMethod(select?.value as PublishTarget["method"]);
-      // setFormData((prev) => ({
-      //   ...prev,
-      //   method: select?.value as PublishTarget["method"],
-      // }));
-    };
+};
     select?.addEventListener("change", selectEventListener);
     return () => {
       select?.removeEventListener("change", selectEventListener);
@@ -50,7 +47,7 @@ export function MethodsSelect({ method, setMethod }: MethodsSelectProps) {
   );
 }
 
-type Endpoint = Pick<PublishTarget, "name" | "endpoint" | "method"> &
+type Endpoint = Pick<PublishTarget, "name" | "endpoint" | "method" | "baseUrl"> &
   Partial<Pick<PublishTarget, "headers" | "body">>;
 
 interface PublishTargetEndpointProps {
@@ -59,29 +56,45 @@ interface PublishTargetEndpointProps {
 }
 
 export function PublishTargetEndpoint({ endpoint, setEndpoint }: PublishTargetEndpointProps) {
-  // console.log("endpoint", endpoint);
   return (
     <div className="flex flex-wrap w-full gap-2 shadow-vscode-widget-shadow p-2 items-center">
       <div className="flex w-full gap-2 items-center">
         <input
           type="text"
           value={endpoint.name}
-          onChange={(e) => setEndpoint({ ...endpoint, name: e.currentTarget.value })}
-          className="w-fit flex-grow"
+          onChange={(e) => {
+            setEndpoint({ ...endpoint, name: e.currentTarget.value })}}
+          className="w-fit "
           placeholder="Name"
+          required
+        />
+        <input
+          type="url"
+          value={endpoint.baseUrl}
+          onChange={(e) =>{
+
+             setEndpoint({ ...endpoint, baseUrl: e.currentTarget.value })}
+            }
+          className="w-full flex-grow"
+          placeholder="Base Url"
           required
         />
         <div className="flex w-fit  gap-2 items-center">
           <MethodsSelect
             method={endpoint.method}
-            setMethod={(value) => setEndpoint({ ...endpoint, method: value })}
+            setMethod={(value) => {
+              setEndpoint({ ...endpoint, method: value })}}
           />
         </div>
       </div>
       <input
-        type="url"
         value={endpoint.endpoint}
-        onChange={(e) => setEndpoint({ ...endpoint, endpoint: e.currentTarget.value })}
+        onChange={(e) =>
+          setEndpoint({
+            ...endpoint,
+            endpoint: addBaseUrlToUrl(e.currentTarget.value, endpoint.baseUrl),
+          })
+        }
         className="w-full"
         placeholder="Endpoint"
         required

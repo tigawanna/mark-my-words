@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { vscode } from "./utils";
 import { usePublishFormsStore } from "./store/publish-form-store";
-import { extractTitleAndDescription } from "./utils/object-helpers";
+import { extractTitleAndDescription } from "./utils/helpers";
 import { MainContainer } from "./components/MainContainer";
 
 export function App() {

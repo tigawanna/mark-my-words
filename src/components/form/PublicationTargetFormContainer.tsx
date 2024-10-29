@@ -13,6 +13,7 @@ return (
  <div className='w-full h-full flex border-t pt-5 mt-5 flex-col items-center justify-center'>
   <h1 className="text-xl ">Publish Target {oneTarget.name}</h1>
     <PublishTargetEndpoint endpoint={{
+      baseUrl: oneTarget.baseUrl,
       name: oneTarget.name,
       endpoint: oneTarget.endpoint,
       method: oneTarget.method,
