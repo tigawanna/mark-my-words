@@ -19,6 +19,14 @@ export interface PublishTarget {
     body: Record<string, string>;
     response: Record<string, string>;
     tokenMappedTo: string;
+    verification:{
+      name:string;
+      endpoint: string;
+      method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+      headers: Record<string, string>;
+      body: Record<string, string>;
+      response: Record<string, string>;
+    }
   };
   response?: {
     status: number;
@@ -32,6 +40,8 @@ type PublishTargetsState = {
   setOneTarget: (value: Partial<PublishTarget>) => void;
   setOneTargetAuth: (value: Partial<PublishTarget["auth"]>) => void
   targets: PublishTarget[];
+  mapppings: Record<string, string>;
+  setMappings: (value: Record<string, string>) => void;
   addTarget: (target: PublishTarget) => void;
   updateTarget: (targetId: string, updatedTarget: PublishTarget) => void;
   deleteTarget: (targetId: string) => void;
@@ -58,6 +68,16 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
             headers: {},
             method: "POST",
             response: {},
+            verification: {
+              name: "auth",
+              body: {},
+              endpoint: "https://example.com",
+              headers: {
+                "Authorization":""
+              },
+              method: "POST",
+              response: {},
+            },
             tokenMappedTo: "request.token,headers.Authorization",
           },
           mappings: {
@@ -72,12 +92,14 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
             const mappings = value.split(",");
             const mappingFrom = mappings[0].split(".");
             const mappingTo = mappings[1].split(".");
-            const mappingFromValues = getNestedProperty(state.oneTarget, mappingFrom[0])
-            const newTarget = { ...state.oneTarget,
+            const mappingFromValues = getNestedProperty(state.oneTarget, mappingFrom[0]);
+            const newTarget = {
+              ...state.oneTarget,
               [mappingTo[0]]: {
-                [mappingTo[1]]: mappingFromValues
+                [mappingTo[1]]: mappingFromValues,
               },
-              auth: { ...state.oneTarget.auth, tokenMappedTo: value } };
+              auth: { ...state.oneTarget.auth, tokenMappedTo: value },
+            };
             const existingTargetIndex = state.targets.findIndex(
               (target) => target.id === newTarget.id
             );
@@ -156,6 +178,12 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
           set((state) => ({
             targets: state.targets.filter((target) => target.id !== targetId),
           }));
+        },
+        mapppings: {},
+        setMappings(value) {
+          set((state) => {
+            return { ...state, mapppings: value };
+          });
         },
       }),
       {

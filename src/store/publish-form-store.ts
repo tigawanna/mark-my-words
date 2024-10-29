@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { devtools, persist, createJSONStorage } from "zustand/middleware";
-import { vscode } from "../utils";
+import { devtools} from "zustand/middleware";
+
 
 interface PublishForm {
   title: string;

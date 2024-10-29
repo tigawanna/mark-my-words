@@ -30,7 +30,7 @@ export function PublishTargetBody({ body_data, setFormBody }: PublishTargetBodyP
     });
   };
   return (
-    <div className="flex flex-col gap-2 p-5">
+    <div className="flex flex-col gap-2 w-full">
       <div className="flex gap-2 w-full">
         <input
           type="text"

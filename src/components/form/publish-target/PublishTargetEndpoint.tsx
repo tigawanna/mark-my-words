@@ -61,13 +61,13 @@ interface PublishTargetEndpointProps {
 export function PublishTargetEndpoint({ endpoint, setEndpoint }: PublishTargetEndpointProps) {
   // console.log("endpoint", endpoint);
   return (
-    <div className="flex flex-wrap w-full gap-2 p-2 items-center">
+    <div className="flex flex-wrap w-full gap-2 shadow-vscode-widget-shadow p-2 items-center">
       <div className="flex w-full gap-2 items-center">
         <input
           type="text"
           value={endpoint.name}
           onChange={(e) => setEndpoint({ ...endpoint, name: e.currentTarget.value })}
-          className="w-fit max-w-[80%] flex-grow"
+          className="w-fit flex-grow"
           placeholder="Name"
           required
         />

@@ -15,7 +15,7 @@ interface PublishTargetFormTabsProps {}
 export function PublishTargetFormTabs({}: PublishTargetFormTabsProps) {
   const { oneTarget, setOneTarget } = usePublishTargetsStore();
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center  rounded-md">
+    <div className="w-full h-full flex flex-col items-center justify-center p-5  rounded-md">
       <vscode-tabs selected-index={2} panel class="panel-example  gap-3">
         <vscode-icon
           label="Maximize Panel Size"
@@ -40,7 +40,7 @@ export function PublishTargetFormTabs({}: PublishTargetFormTabsProps) {
         </vscode-tab-panel>
 
         <vscode-tab-header slot="header">Body</vscode-tab-header>
-        <vscode-tab-panel>
+        <vscode-tab-panel class="w-full">
           <PublishTargetBody
             body_data={oneTarget.body}
             setFormBody={(value) => setOneTarget({ ...oneTarget, body: value })}
@@ -49,8 +49,7 @@ export function PublishTargetFormTabs({}: PublishTargetFormTabsProps) {
         <vscode-tab-header slot="header">auth</vscode-tab-header>
         <vscode-tab-panel>
           <vscode-scrollable>
-            <PublishTargetAuthForm
-            />
+            <PublishTargetAuthForm />
           </vscode-scrollable>
         </vscode-tab-panel>
       </vscode-tabs>
