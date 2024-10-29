@@ -7,7 +7,7 @@ import "@vscode-elements/elements/dist/vscode-table-row";
 import "@vscode-elements/elements/dist/vscode-table-cell";
 import { PublishTargetBody } from "./PublishTargetBody";
 import { PublishTargetHeaders } from "./PublishTargetHeaders";
-import { usePublishTargetsStore, type PublishTarget } from "../../../store/targets-store";
+import { usePublishTargetsStore, type PublishTarget } from "@/store/targets-store";
 import { PublishTargetEndpoint } from "./PublishTargetEndpoint";
 import { getNestedProperty } from "../../../utils/helpers";
 import { PostTargetAuthVerification } from "./PostTargetAuthVerification";
@@ -29,12 +29,12 @@ export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
             method: oneTarget?.auth?.method ?? "POST",
           }}
           setEndpoint={(value) => {
-            setOneTargetAuth({
-              ...oneTarget.auth,
-              name: value?.name,
-              endpoint: value?.endpoint,
-              method: value?.method,
-            });
+            setOneTargetAuth((prev) => ({
+              ...prev,
+              name: value?.name ?? "auth",
+              endpoint: value?.endpoint ?? "/auth",
+              method: value?.method ?? "POST",
+            }));
           }}
         />
       </div>
@@ -60,7 +60,10 @@ export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
                 <PublishTargetHeaders
                   headers={oneTarget.auth?.headers ?? {}}
                   setFormHeaders={(value) =>
-                    setOneTargetAuth({ ...oneTarget.auth?.headers, headers: value })
+                    setOneTargetAuth((prev) => ({ ...prev, headers:{
+                      ...prev?.headers,
+                      ...value
+                    } }))
                   }
                 />
               </div>
@@ -73,7 +76,10 @@ export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
               <div className={""}>auth body</div>
               <PublishTargetBody
                 body_data={oneTarget.auth?.body ?? {}}
-                setFormBody={(value) => setOneTargetAuth({ ...oneTarget.auth?.body, body: value })}
+                setFormBody={(value) => setOneTargetAuth((prev) => ({ ...prev, body:{
+                  ...prev?.body,
+                  ...value
+                } }))}
               />
             </div>
           </vscode-tab-panel>
@@ -92,7 +98,7 @@ export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
           value={oneTarget.auth?.tokenMappedTo ?? "request.token,headers.Authorization"}
           placeholder="request.token,headers.Authorization"
           onChange={(e) =>
-            setOneTargetAuth({ ...oneTarget.auth, tokenMappedTo: e.currentTarget.value })
+            setOneTargetAuth((prevAuth) => ({ ...prevAuth, tokenMappedTo: e.currentTarget.value }))
           }
         />
         {oneTarget.auth?.response && tokenResponse && (
@@ -131,19 +137,18 @@ export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
 
 function addTokenToHeaders(authResponse?: Record<string, string>) {
   if (!authResponse) return;
-  const oneTarget = usePublishTargetsStore.getState().oneTarget;
   const updateHeaders = usePublishTargetsStore.getState().setOneTarget;
   const tokenRespose = getReturnedToken(authResponse);
   if (!tokenRespose) return;
   const { addTokenTo, responseToken } = tokenRespose;
   const tokenkey = addTokenTo.split(".")[1];
-  updateHeaders({
-    ...oneTarget,
+  updateHeaders((prevTarget) => ({
+    ...prevTarget,
     headers: {
-      ...oneTarget.headers,
+      ...prevTarget.headers,
       [tokenkey]: responseToken,
     },
-  });
+  }));
 }
 function getReturnedToken(authResponse?: Record<string, string>) {
   if (!authResponse) return;
@@ -162,10 +167,10 @@ function getReturnedToken(authResponse?: Record<string, string>) {
 async function testAuthEndpoint(oneTarget: PublishTarget) {
   try {
     const updateAuth = usePublishTargetsStore.getState().setOneTargetAuth;
-    if (!oneTarget.auth) {
+    if (!oneTarget?.auth || !oneTarget?.auth?.endpoint) {
       throw new Error("no auth object");
     }
-    const { endpoint, headers, body, method } = oneTarget.auth;
+    const { endpoint, headers, body, method } = oneTarget?.auth;
     const authResponse = await fetch(endpoint, {
       method,
       headers: {
@@ -180,7 +185,7 @@ async function testAuthEndpoint(oneTarget: PublishTarget) {
     });
 
     console.log("==== authResponse ===== ", authResponse);
-    updateAuth({ ...oneTarget.auth, response: authResponse });
+    updateAuth((prevAuth)=>({ ...prevAuth, response: authResponse }));
     return authResponse;
   } catch (error: any) {
     console.error(" === testAuthEndpoint error ===", error.message);

@@ -28,6 +28,7 @@
     "noUncheckedSideEffectImports": true,
     "paths": {
       "@/*": ["./src/*"],
+      "@extension/*": ["./extension/*"]
     }
   },
   "include": ["extension", "vite.config.mts"]

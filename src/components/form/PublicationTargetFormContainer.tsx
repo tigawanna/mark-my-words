@@ -20,7 +20,10 @@ return (
       body: oneTarget.body,
       headers: oneTarget.headers
     }} 
-    setEndpoint={(value) => setOneTarget(value)}/>
+    setEndpoint={(value) => setOneTarget((prev)=>({
+      ...prev,
+      ...value
+    }))}/>
     <PublishTargetFormTabs/>
  </div>
 );

@@ -2,7 +2,7 @@ import "@vscode-elements/elements/dist/vscode-single-select";
 import "@vscode-elements/elements/dist/vscode-option";
 import { useEffect, useRef } from "react";
 import type { VscodeSingleSelect } from "@vscode-elements/elements/dist/vscode-single-select";
-import { type PublishTarget } from "../../../store/targets-store";
+import { type PublishTarget } from "@/store/targets-store";
 import { addBaseUrlToUrl } from "@/utils/helpers";
 interface MethodsSelectProps {
   method: PublishTarget["method"];
@@ -15,7 +15,7 @@ export function MethodsSelect({ method, setMethod }: MethodsSelectProps) {
     const select = selectRef?.current;
     const selectEventListener = (_: Event) => {
       setMethod(select?.value as PublishTarget["method"]);
-};
+    };
     select?.addEventListener("change", selectEventListener);
     return () => {
       select?.removeEventListener("change", selectEventListener);
@@ -63,7 +63,8 @@ export function PublishTargetEndpoint({ endpoint, setEndpoint }: PublishTargetEn
           type="text"
           value={endpoint.name}
           onChange={(e) => {
-            setEndpoint({ ...endpoint, name: e.currentTarget.value })}}
+            setEndpoint({ ...endpoint, name: e.currentTarget.value });
+          }}
           className="w-fit "
           placeholder="Name"
           required
@@ -71,10 +72,9 @@ export function PublishTargetEndpoint({ endpoint, setEndpoint }: PublishTargetEn
         <input
           type="url"
           value={endpoint.baseUrl}
-          onChange={(e) =>{
-
-             setEndpoint({ ...endpoint, baseUrl: e.currentTarget.value })}
-            }
+          onChange={(e) => {
+            setEndpoint({ ...endpoint, baseUrl: e.currentTarget.value });
+          }}
           className="w-full flex-grow"
           placeholder="Base Url"
           required
@@ -83,7 +83,8 @@ export function PublishTargetEndpoint({ endpoint, setEndpoint }: PublishTargetEn
           <MethodsSelect
             method={endpoint.method}
             setMethod={(value) => {
-              setEndpoint({ ...endpoint, method: value })}}
+              setEndpoint({ ...endpoint, method: value });
+            }}
           />
         </div>
       </div>

@@ -13,21 +13,21 @@ export interface PublishTarget {
   body: Record<string, string>;
   editing: boolean;
   auth?: {
-    name: string;
-    endpoint: string;
-    method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-    headers: Record<string, string>;
-    body: Record<string, string>;
-    response: Record<string, string>;
-    tokenMappedTo: string;
-    verification:{
-      name:string;
-      endpoint: string;
-      method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-      headers: Record<string, string>;
-      body: Record<string, string>;
-      response: Record<string, string>;
-    }
+    name?: string;
+    endpoint?: string;
+    method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+    headers?: Record<string, string>;
+    body?: Record<string, string>;
+    response?: Record<string, string>;
+    tokenMappedTo?: string;
+    verification?: {
+      name?: string;
+      endpoint?: string;
+      method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+      headers?: Record<string, string>;
+      body?: Record<string, string>;
+      response?: Record<string, string>;
+    };
   };
   response?: {
     status: number;
@@ -38,8 +38,8 @@ export interface PublishTarget {
 }
 type PublishTargetsState = {
   oneTarget: PublishTarget;
-  setOneTarget: (value: Partial<PublishTarget>) => void;
-  setOneTargetAuth: (value: Partial<PublishTarget["auth"]>) => void
+  setOneTarget: (value: (prevState: PublishTarget) => PublishTarget) => void;
+  setOneTargetAuth: (value: (prevState: PublishTarget["auth"]) => PublishTarget["auth"]) => void;
   targets: PublishTarget[];
   mapppings: Record<string, string>;
   setMappings: (value: Record<string, string>) => void;
@@ -48,7 +48,6 @@ type PublishTargetsState = {
   deleteTarget: (targetId: string) => void;
   setTokenMappedTo: (value: string) => void;
 };
-
 
 export const usePublishTargetsStore = create<PublishTargetsState>()(
   devtools(
@@ -75,7 +74,7 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
               body: {},
               endpoint: "https://example.com/auth",
               headers: {
-                "Authorization":""
+                Authorization: "",
               },
               method: "POST",
               response: {},
@@ -88,8 +87,32 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
             content: "body.content",
           },
         },
+
+        setOneTarget: (value: (prevState: PublishTarget) => PublishTarget) => {
+          set((state) => {
+            const newTarget = value(state.oneTarget);
+            const existingTargetIndex = state.targets.findIndex(
+              (target) => target.id === newTarget.id
+            );
+            if (existingTargetIndex > -1) {
+              return {
+                ...state,
+                targets: state.targets.map((target, index) =>
+                  index === existingTargetIndex ? newTarget : target
+                ),
+                oneTarget: newTarget,
+              };
+            } else {
+              return {
+                ...state,
+                targets: [...state.targets, newTarget],
+                oneTarget: newTarget,
+              };
+            }
+          });
+        },
+
         setTokenMappedTo(value) {
-          // @ts-expect-error
           set((state) => {
             const mappings = value.split(",");
             const mappingFrom = mappings[0].split(".");
@@ -120,31 +143,14 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
             }
           });
         },
-        setOneTarget: (value) => {
-          set((state) => {
-            const newTarget = { ...state.oneTarget, ...value };
-            const existingTargetIndex = state.targets.findIndex(
-              (target) => target.id === newTarget.id
-            );
-            if (existingTargetIndex > -1) {
-              return {
-                targets: state.targets.map((target, index) =>
-                  index === existingTargetIndex ? newTarget : target
-                ),
-                oneTarget: newTarget,
-              };
-            } else {
-              return {
-                targets: [...state.targets, newTarget],
-                oneTarget: newTarget,
-              };
-            }
-          });
-        },
+
         setOneTargetAuth: (value) => {
-          // @ts-expect-error
-          set((state) => {
-            const newTarget = { ...state.oneTarget, auth: { ...state.oneTarget.auth, ...value } };
+        set((state) => {
+             const newTargetAuth = value(state.oneTarget.auth);
+            const newTarget = {
+              ...state.oneTarget,
+              auth: newTargetAuth,
+            };
             const existingTargetIndex = state.targets.findIndex(
               (target) => target.id === newTarget.id
             );

@@ -7,7 +7,7 @@ import "@vscode-elements/elements/dist/vscode-table-row";
 import "@vscode-elements/elements/dist/vscode-table-cell";
 
 import { useState } from "react";
-import type { PublishTarget } from "../../../store/targets-store";
+import type { PublishTarget } from "@/store/targets-store";
 interface PublishTargetHeadersProps {
   headers: Record<string, string>;
   setFormHeaders: (value: PublishTarget["headers"]) => void;
