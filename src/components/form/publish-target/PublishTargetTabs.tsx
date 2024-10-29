@@ -34,10 +34,23 @@ export function PublishTargetFormTabs({}: PublishTargetFormTabsProps) {
           <vscode-scrollable>
             <PublishTargetHeaders
               headers={oneTarget.headers}
-              setFormHeaders={(value) => setOneTarget((prev) => ({ ...prev, headers:{
-                ...prev.headers,
-                ...value
-              }}))}
+              setFormHeaders={(value) =>
+                setOneTarget((prev) => ({
+                  ...prev,
+                  headers: {
+                    ...prev.headers,
+                    ...value,
+                  },
+                }))
+              }
+              removeFormHeader={(value) =>
+                setOneTarget((prev) => ({
+                  ...prev,
+                  headers: {
+                    ...value,
+                  },
+                }))
+              }
             />
           </vscode-scrollable>
         </vscode-tab-panel>
@@ -46,10 +59,15 @@ export function PublishTargetFormTabs({}: PublishTargetFormTabsProps) {
         <vscode-tab-panel class="w-full">
           <PublishTargetBody
             body_data={oneTarget.body}
-            setFormBody={(value) => setOneTarget((prev) => ({ ...prev, body:{
-              ...prev.body,
-              ...value
-            } }))}
+            setFormBody={(value) =>
+              setOneTarget((prev) => ({
+                ...prev,
+                body: {
+                  ...prev.body,
+                  ...value,
+                },
+              }))
+            }
           />
         </vscode-tab-panel>
         <vscode-tab-header slot="header">auth</vscode-tab-header>

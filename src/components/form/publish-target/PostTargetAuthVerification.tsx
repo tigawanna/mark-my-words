@@ -54,10 +54,24 @@ export function PostTargetAuthVerification({
           setFormHeaders={(value) =>
             setOneTargetAuth((prevAuth) => ({
               ...prevAuth,
-              verification: { ...defaultVerification, headers:{
-                ...prevAuth?.verification?.headers,
-                ...value
-              } },
+              verification: {
+                ...defaultVerification,
+                headers: {
+                  ...prevAuth?.verification?.headers,
+                  ...value,
+                },
+              },
+            }))
+          }
+          removeFormHeader={(value) =>
+            setOneTargetAuth((prevAuth) => ({
+              ...prevAuth,
+              verification: {
+                ...defaultVerification,
+                headers: {
+                  ...value,
+                },
+              },
             }))
           }
         />
@@ -70,10 +84,13 @@ export function PostTargetAuthVerification({
           setFormBody={(value) =>
             setOneTargetAuth((prevAuth) => ({
               ...prevAuth,
-              verification: { ...prevAuth?.verification, body:{
-                ...prevAuth?.verification?.body,
-                ...value
-              } },
+              verification: {
+                ...prevAuth?.verification,
+                body: {
+                  ...prevAuth?.verification?.body,
+                  ...value,
+                },
+              },
             }))
           }
         />

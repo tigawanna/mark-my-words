@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { devtools, persist, createJSONStorage } from "zustand/middleware";
 import { vscode } from "../utils";
 import { getNestedProperty } from "../utils/helpers";
+import { console } from "inspector";
 
 export interface PublishTarget {
   id: string;
@@ -91,6 +92,7 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
         setOneTarget: (value: (prevState: PublishTarget) => PublishTarget) => {
           set((state) => {
             const newTarget = value(state.oneTarget);
+            // console.log(" ==== newTarget ==== ",newTarget)
             const existingTargetIndex = state.targets.findIndex(
               (target) => target.id === newTarget.id
             );

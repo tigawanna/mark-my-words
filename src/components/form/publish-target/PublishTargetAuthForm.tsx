@@ -65,6 +65,11 @@ export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
                       ...value
                     } }))
                   }
+                  removeFormHeader={(value) =>
+                    setOneTargetAuth((prev) => ({ ...prev, headers:{
+                      ...value
+                    } }))
+                  }
                 />
               </div>
             </vscode-scrollable>

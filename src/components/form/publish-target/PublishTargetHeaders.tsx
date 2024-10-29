@@ -11,9 +11,10 @@ import type { PublishTarget } from "@/store/targets-store";
 interface PublishTargetHeadersProps {
   headers: Record<string, string>;
   setFormHeaders: (value: PublishTarget["headers"]) => void;
+  removeFormHeader: (value: PublishTarget["headers"]) => void;
 }
 
-export function PublishTargetHeaders({ headers, setFormHeaders }: PublishTargetHeadersProps) {
+export function PublishTargetHeaders({ headers, setFormHeaders,removeFormHeader }: PublishTargetHeadersProps) {
   const [editing, setEditing] = useState(false);
   const [header, setHeader] = useState<{ key: string; value: string }>({
     key: "",
@@ -117,7 +118,7 @@ export function PublishTargetHeaders({ headers, setFormHeaders }: PublishTargetH
                           // });
                             const newHeaders = { ...headers };
                             delete newHeaders[key];
-                          setFormHeaders(newHeaders);
+                            removeFormHeader(newHeaders);
                         }}></vscode-icon>
                     </div>
                   </div>
