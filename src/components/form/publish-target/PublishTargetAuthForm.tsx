@@ -83,7 +83,7 @@ export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
         <input
           value={oneTarget.auth?.tokenMappedTo ?? "request.token,headers.Authorization"}
           placeholder="request.token,headers.Authorization"
-          onChange={(e) => setOneTargetAuth({ ...oneTarget.auth, tokenMappedTo: e.target.value })}
+          onChange={(e) => setOneTargetAuth({ ...oneTarget.auth, tokenMappedTo: e.currentTarget.value })}
         />
         {oneTarget.auth?.response && tokenResponse && (
           <div className="w-full flex flex-col  justify-center items-center ">

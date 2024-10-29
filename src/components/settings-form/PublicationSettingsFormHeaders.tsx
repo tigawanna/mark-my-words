@@ -53,7 +53,7 @@ export function PublicationSettingsFormHeaders({
             setHeader((prev) => {
               return {
                 ...prev,
-                key: e.target.value,
+                key: e.currentTarget.value,
               };
             })
           }
@@ -67,7 +67,7 @@ export function PublicationSettingsFormHeaders({
             setHeader((prev) => {
               return {
                 ...prev,
-                value: e.target.value,
+                value: e.currentTarget.value,
               };
             })
           }

@@ -1,0 +1,1 @@
+{"root":["./extension/env.d.ts","./extension/index.ts","./extension/stores/selection-strore.ts","./extension/utils/config-manager.ts.ts","./extension/views/helper.ts","./extension/views/main-panel.ts","./vite.config.mts"],"version":"5.6.3"}

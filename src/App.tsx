@@ -1,17 +1,17 @@
 // App.tsx
 import { useEffect } from "react";
-import { usePublishFormsStore } from "./store/publish-form-store";
-import { MainContainer } from "./components/MainContainer";
 import { vscode } from "./utils";
+import { usePublishFormsStore } from "./store/publish-form-store";
 import { extractTitleAndDescription } from "./utils/object-helpers";
+import { MainContainer } from "./components/MainContainer";
 
-function App() {
+export function App() {
   const updateFormData = usePublishFormsStore((state) => state.updateFormData);
 
-  // ❌
-  useEffect(() => {
-    vscode.postMessage("ready");
-  }, []);
+  // // ❌
+  // useEffect(() => {
+  //   vscode.postMessage("ready");
+  // }, []);
 
   // ✅
   useEffect(() => {
@@ -59,4 +59,4 @@ function App() {
   );
 }
 
-export default App;
+

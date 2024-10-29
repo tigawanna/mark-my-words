@@ -60,7 +60,7 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
             <input
               type="text"
               value={formData.name}
-              onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, name: e.currentTarget.value }))}
               className="w-fit max-w-[80%] flex-grow"
               placeholder="Name"
               required
@@ -72,7 +72,7 @@ export function PublicationSettingsForm({ formData, setFormData }: PublicationSe
           <input
             type="url"
             value={formData.endpoint}
-            onChange={(e) => setFormData((prev) => ({ ...prev, endpoint: e.target.value }))}
+            onChange={(e) => setFormData((prev) => ({ ...prev, endpoint: e.currentTarget.value }))}
             className="w-full"
             placeholder="Endpoint"
             required

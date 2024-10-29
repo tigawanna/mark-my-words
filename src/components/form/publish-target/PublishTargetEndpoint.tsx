@@ -66,7 +66,7 @@ export function PublishTargetEndpoint({ endpoint, setEndpoint }: PublishTargetEn
         <input
           type="text"
           value={endpoint.name}
-          onChange={(e) => setEndpoint({ ...endpoint, name: e.target.value })}
+          onChange={(e) => setEndpoint({ ...endpoint, name: e.currentTarget.value })}
           className="w-fit max-w-[80%] flex-grow"
           placeholder="Name"
           required
@@ -81,7 +81,7 @@ export function PublishTargetEndpoint({ endpoint, setEndpoint }: PublishTargetEn
       <input
         type="url"
         value={endpoint.endpoint}
-        onChange={(e) => setEndpoint({ ...endpoint, endpoint: e.target.value })}
+        onChange={(e) => setEndpoint({ ...endpoint, endpoint: e.currentTarget.value })}
         className="w-full"
         placeholder="Endpoint"
         required

@@ -40,7 +40,7 @@ export function PublishTargetBody({ body_data, setFormBody }: PublishTargetBodyP
             setKeyValue((prev) => {
               return {
                 ...prev,
-                key: e.target.value,
+                key: e.currentTarget.value,
               };
             })
           }
@@ -54,7 +54,7 @@ export function PublishTargetBody({ body_data, setFormBody }: PublishTargetBodyP
             setKeyValue((prev) => {
               return {
                 ...prev,
-                value: e.target.value,
+                value: e.currentTarget.value,
               };
             })
           }

@@ -39,7 +39,7 @@ export function PublishTargetHeaders({ headers, setFormHeaders }: PublishTargetH
             setHeader((prev) => {
               return {
                 ...prev,
-                key: e.target.value,
+                key: e.currentTarget.value,
               };
             })
           }
@@ -53,7 +53,7 @@ export function PublishTargetHeaders({ headers, setFormHeaders }: PublishTargetH
             setHeader((prev) => {
               return {
                 ...prev,
-                value: e.target.value,
+                value: e.currentTarget.value,
               };
             })
           }

@@ -43,7 +43,7 @@ export function PublishTargetMappings({
             setKeyValue((prev) => {
               return {
                 ...prev,
-                key: e.target.value,
+                key: e.currentTarget.value,
               };
             })
           }
@@ -57,7 +57,7 @@ export function PublishTargetMappings({
             setKeyValue((prev) => {
               return {
                 ...prev,
-                value: e.target.value,
+                value: e.currentTarget.value,
               };
             })
           }

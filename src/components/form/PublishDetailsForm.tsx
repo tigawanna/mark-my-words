@@ -1,4 +1,4 @@
-import { usePublishFormsStore } from "../../store/publish-form-store";
+import { usePublishFormsStore } from "@/store/publish-form-store";
 
 
 interface PublishDetailsFormProps {}
@@ -18,7 +18,7 @@ export function PublishDetailsForm({}: PublishDetailsFormProps) {
               type="text"
               value={formdata.title}
               onChange={(e) =>
-                usePublishFormsStore.getState().updateFormData({ title: e.target.value })
+                usePublishFormsStore.getState().updateFormData({ title: e.currentTarget.value })
               }
             />
           </label>
@@ -30,7 +30,7 @@ export function PublishDetailsForm({}: PublishDetailsFormProps) {
               name="descriptioon"
               value={formdata.description}
               onChange={(e) =>
-                usePublishFormsStore.getState().updateFormData({ description: e.target.value })
+                usePublishFormsStore.getState().updateFormData({ description: e.currentTarget.value })
               }
             />
           </label>
@@ -43,7 +43,7 @@ export function PublishDetailsForm({}: PublishDetailsFormProps) {
             name="content"
             value={formdata.content}
             onChange={(e) =>
-              usePublishFormsStore.getState().updateFormData({ content: e.target.value })
+              usePublishFormsStore.getState().updateFormData({ content: e.currentTarget.value })
             }
           />
         </label>
