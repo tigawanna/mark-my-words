@@ -6,6 +6,7 @@ import { getNestedProperty } from "../utils/object-helpers";
 export interface PublishTarget {
   id: string;
   name: string;
+  baseUrl: string;
   endpoint: string;
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   headers: Record<string, string>;
@@ -56,6 +57,7 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
         oneTarget: {
           id: "",
           name: "",
+          baseUrl: "https://example.com",
           endpoint: "",
           method: "GET",
           headers: {},
@@ -64,14 +66,14 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
           auth: {
             name: "auth",
             body: {},
-            endpoint: "https://example.com",
+            endpoint: "https://example.com/auth",
             headers: {},
             method: "POST",
             response: {},
             verification: {
               name: "auth",
               body: {},
-              endpoint: "https://example.com",
+              endpoint: "https://example.com/auth",
               headers: {
                 "Authorization":""
               },
