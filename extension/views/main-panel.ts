@@ -52,9 +52,9 @@ export class MainPanel {
               }
             }
             break;
-           case "inform":
-            showWindowMessages(message.data); 
-           break;
+          //  case "inform":
+          //   showWindowMessages(message.data); 
+          //  break;
         }
       },
       null,

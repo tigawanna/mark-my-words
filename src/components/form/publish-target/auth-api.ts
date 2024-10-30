@@ -1,4 +1,5 @@
 import { usePublishTargetsStore, PublishTarget } from "@/store/targets-store";
+import { vscode } from "@/utils";
 import { getNestedProperty } from "@/utils/helpers";
 
 interface IAuthWrapperProps {
@@ -80,6 +81,13 @@ export async function testAuthVerificationEndpoint(oneTarget: PublishTarget) {
       ...prevAuth?.verification,
       response: authResponse
     } }));
+    vscode.postMessage({
+      type:"inform",
+      data:{
+        type:"info",
+        message:"Authentication verification success"
+      }
+    })
     return authResponse;
   } catch (error: any) {
     console.error(" === testAuthVerificationEndpoint error ===", error.message);
