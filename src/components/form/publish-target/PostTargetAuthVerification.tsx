@@ -2,6 +2,7 @@ import { PublishTarget } from "@/store/targets-store";
 import { PublishTargetBody } from "./PublishTargetBody";
 import { PublishTargetHeaders } from "./PublishTargetHeaders";
 import { PublishTargetEndpoint } from "./PublishTargetEndpoint";
+import { testAuthVerificationEndpoint } from "./auth-api";
 
 interface PostTargetAuthVerificationProps {
   oneTarget: PublishTarget;
@@ -95,6 +96,9 @@ export function PostTargetAuthVerification({
           }
         />
       </div>
+      <button className={"w-[40%]"} onClick={() => testAuthVerificationEndpoint(oneTarget)}>Test Auth Verification</button>
     </div>
   );
 }
+
+
