@@ -7,6 +7,7 @@ import {
   window,
 } from "vscode";
 import { WebviewHelper } from "./helper";
+import { showWindowMessages } from "@extension/utils/messages";
 
 export class MainPanel {
   public static currentPanel: MainPanel | undefined;
@@ -51,6 +52,9 @@ export class MainPanel {
               }
             }
             break;
+           case "inform":
+            showWindowMessages(message.data); 
+           break;
         }
       },
       null,
