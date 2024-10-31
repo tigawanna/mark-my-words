@@ -27,10 +27,10 @@ export async function fetchWrapper({ endpoint, headers, body, method }: IAuthWra
 }
 
 export function addTokenToHeaders(authResponse?: Record<string, string>) {
-  if (!authResponse) return;
+  if (!authResponse) {return;}
   const updateHeaders = usePublishTargetsStore.getState().setOneTarget;
   const tokenRespose = getReturnedToken(authResponse);
-  if (!tokenRespose) return;
+  if (!tokenRespose) {return;}
   const { addTokenTo, responseToken } = tokenRespose;
   const tokenkey = addTokenTo.split(".")[1];
   updateHeaders((prevTarget) => ({
@@ -42,14 +42,14 @@ export function addTokenToHeaders(authResponse?: Record<string, string>) {
   }));
 }
 export function getReturnedToken(authResponse?: Record<string, string>) {
-  if (!authResponse) return;
+  if (!authResponse) {return;}
   const tokenLocation = usePublishTargetsStore.getState().oneTarget.auth?.tokenMappedTo;
-  if (!tokenLocation) return;
+  if (!tokenLocation) {return;}
   // sample token location is mapped as such "request.token,headers.Authorization"
   const tokenLocations = tokenLocation.split(",");
   const requestTokenPart = tokenLocations[0].split(".");
   const responseToken = getNestedProperty(authResponse, requestTokenPart[1]);
-  if (!responseToken) return;
+  if (!responseToken) {return;}
   if (typeof responseToken === "string" && responseToken.length > 1) {
     return { responseToken, addTokenTo: tokenLocations[1] };
   }
