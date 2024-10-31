@@ -222,12 +222,6 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
               return vscode.getState()[name];
             },
             setItem(name, value) {
-              if(name ==="publish-targets"){
-                vscode.postMessage({
-                  type: "updatePublishTarget",
-                  data: value,
-                });
-              }
               return vscode.setState({ [name]: value });
             },
             removeItem(name) {

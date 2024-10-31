@@ -2,8 +2,6 @@
 export class SelectionStore {
   private static selectedText: string = "";
 
-
-
   static setSelectedText(text: string) {
     this.selectedText = text;
   }

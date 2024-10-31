@@ -8,7 +8,7 @@ import {
 } from "vscode";
 import { WebviewHelper } from "./helper";
 import { showWindowMessages } from "../utils/info-messages";
-import { workSpacePersistSwitch } from "../utils/workspace-persist";
+import { ConfigurationManager, workSpacePersistSwitch } from "../utils/workspace-persist";
 
 export class MainPanel {
   public static currentPanel: MainPanel | undefined;
@@ -44,9 +44,10 @@ export class MainPanel {
             if (this._initialText.length > 0) {
               try {
                 await this._panel.webview.postMessage({
-                  type: "selectedText",
+                  type: "initialPayload",
                   data: {
                     selectedText: this._initialText,
+                    publishTargets: ConfigurationManager.getPublishTargets(),
                   },
                 });
               } catch (error) {
