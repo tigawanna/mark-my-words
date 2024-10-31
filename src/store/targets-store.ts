@@ -1,8 +1,9 @@
+// target-store
 import { create } from "zustand";
 import { devtools, persist, createJSONStorage } from "zustand/middleware";
 import { vscode } from "../utils";
 import { getNestedProperty } from "../utils/helpers";
-import { console } from "inspector";
+
 
 export interface PublishTarget {
   id: string;
@@ -44,9 +45,11 @@ type PublishTargetsState = {
   targets: PublishTarget[];
   mapppings: Record<string, string>;
   setMappings: (value: Record<string, string>) => void;
-  addTarget: (target: PublishTarget) => void;
-  updateTarget: (targetId: string, updatedTarget: PublishTarget) => void;
-  deleteTarget: (targetId: string) => void;
+  setTargets: (value: (prev: PublishTarget[]) => PublishTarget[]) => void;
+
+  // addTarget: (target: PublishTarget) => void;
+  // updateTarget: (targetId: string, updatedTarget: PublishTarget) => void;
+  // deleteTarget: (targetId: string) => void;
   setTokenMappedTo: (value: string) => void;
 };
 
@@ -88,15 +91,26 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
             content: "body.content",
           },
         },
-
+        setTargets: (value) => {
+          set((state) => {
+            const newTargets = value(state.targets);
+            return {
+              ...state,
+              targets: newTargets,
+            };
+          });
+        },
         setOneTarget: (value: (prevState: PublishTarget) => PublishTarget) => {
           set((state) => {
             const newTarget = value(state.oneTarget);
-            // console.log(" ==== newTarget ==== ",newTarget)
             const existingTargetIndex = state.targets.findIndex(
               (target) => target.id === newTarget.id
             );
             if (existingTargetIndex > -1) {
+              // vscode.postMessage({
+              //   type: "addPublishTarget",
+              //   data: newTarget,
+              // });
               return {
                 ...state,
                 targets: state.targets.map((target, index) =>
@@ -105,6 +119,10 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
                 oneTarget: newTarget,
               };
             } else {
+              // vscode.postMessage({
+              //   type: "addPublishTarget",
+              //   data: newTarget,
+              // });
               return {
                 ...state,
                 targets: [...state.targets, newTarget],
@@ -147,8 +165,8 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
         },
 
         setOneTargetAuth: (value) => {
-        set((state) => {
-             const newTargetAuth = value(state.oneTarget.auth);
+          set((state) => {
+            const newTargetAuth = value(state.oneTarget.auth);
             const newTarget = {
               ...state.oneTarget,
               auth: newTargetAuth,
@@ -172,23 +190,23 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
           });
         },
         targets: [],
-        addTarget: (target) => {
-          set((state) => ({
-            targets: [...state.targets, target],
-          }));
-        },
-        updateTarget: (targetId, updatedTarget) => {
-          set((state) => ({
-            targets: state.targets.map((target) =>
-              target.id === targetId ? updatedTarget : target
-            ),
-          }));
-        },
-        deleteTarget: (targetId) => {
-          set((state) => ({
-            targets: state.targets.filter((target) => target.id !== targetId),
-          }));
-        },
+        // addTarget: (target) => {
+        //   set((state) => ({
+        //     targets: [...state.targets, target],
+        //   }));
+        // },
+        // updateTarget: (targetId, updatedTarget) => {
+        //   set((state) => ({
+        //     targets: state.targets.map((target) =>
+        //       target.id === targetId ? updatedTarget : target
+        //     ),
+        //   }));
+        // },
+        // deleteTarget: (targetId) => {
+        //   set((state) => ({
+        //     targets: state.targets.filter((target) => target.id !== targetId),
+        //   }));
+        // },
         mapppings: {},
         setMappings(value) {
           set((state) => {
@@ -204,6 +222,12 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
               return vscode.getState()[name];
             },
             setItem(name, value) {
+              if(name ==="publish-targets"){
+                vscode.postMessage({
+                  type: "updatePublishTarget",
+                  data: value,
+                });
+              }
               return vscode.setState({ [name]: value });
             },
             removeItem(name) {
@@ -211,6 +235,7 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
             },
           };
         }),
+        
       }
     )
   )

@@ -27,8 +27,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@extension/*": ["./extension/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["extension", "vite.config.mts"]

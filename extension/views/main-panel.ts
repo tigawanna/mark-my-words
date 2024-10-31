@@ -8,7 +8,7 @@ import {
 } from "vscode";
 import { WebviewHelper } from "./helper";
 import { showWindowMessages } from "../utils/info-messages";
-import { workSpacePersistSwitch } from "@extension/utils/workspace-persist";
+import { workSpacePersistSwitch } from "../utils/workspace-persist";
 
 export class MainPanel {
   public static currentPanel: MainPanel | undefined;

@@ -4,16 +4,13 @@ import { vscode } from "./utils";
 import { usePublishFormsStore } from "./store/publish-form-store";
 import { extractTitleAndDescription } from "./utils/helpers";
 import { MainContainer } from "./components/MainContainer";
+import { usePublishTargetsStore } from "./store/targets-store";
 
 export function App() {
   const updateFormData = usePublishFormsStore((state) => state.updateFormData);
+  const setTargets = usePublishTargetsStore((state) => state.setTargets);
 
-  // // ❌
-  // useEffect(() => {
-  //   vscode.postMessage("ready");
-  // }, []);
-
-  // ✅
+// ✅
   useEffect(() => {
     vscode.postMessage({
       type: "ready",
@@ -38,6 +35,11 @@ export function App() {
               });
             }
           }
+          break;
+        case "publishTargets":
+          setTargets((prevTargets) => {
+            return [...prevTargets, ...message.data];
+          });
           break;
       }
     };
