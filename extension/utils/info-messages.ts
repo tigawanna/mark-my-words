@@ -1,4 +1,4 @@
-import {  window } from "vscode";
+import { window } from "vscode";
 type MessageTypes = "success" | "error" | "info" | "warning";
 
 type TShowMessages = {
@@ -6,19 +6,18 @@ type TShowMessages = {
   type: MessageTypes;
 };
 
-export function showWindowMessages({ message,type }: TShowMessages) {
+export function showWindowMessages({ message, type }: TShowMessages) {
   if (type === "error") {
     window.showErrorMessage(message, {
-      modal: true,
+      // modal: true,
     });
   }
   if (type === "warning") {
     window.showWarningMessage(message, {
-      modal: true,
+      // modal: true,
     });
   }
-
   window.showInformationMessage(message, {
-    modal: true,
+    // modal: true,
   });
 }

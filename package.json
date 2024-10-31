@@ -29,6 +29,13 @@
     "configuration": {
       "title": "Mark My Words",
       "properties": {
+        "properties": {
+          "markMyWords.publishTargets":{
+            "type": "array",
+            "default": [],
+            "description": "Configured publish targets"
+          }
+        },
         "markMyWords.maxHistorySize": {
           "type": "number",
           "default": 50,

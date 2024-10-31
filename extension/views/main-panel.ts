@@ -7,7 +7,8 @@ import {
   window,
 } from "vscode";
 import { WebviewHelper } from "./helper";
-import { showWindowMessages } from "@extension/utils/messages";
+import { showWindowMessages } from "../utils/info-messages";
+import { workSpacePersistSwitch } from "@extension/utils/workspace-persist";
 
 export class MainPanel {
   public static currentPanel: MainPanel | undefined;
@@ -37,6 +38,7 @@ export class MainPanel {
     // Setup message handling
     this._panel.webview.onDidReceiveMessage(
       async (message) => {
+        //  inital message from webview
         switch (message.type) {
           case "ready":
             if (this._initialText.length > 0) {
@@ -52,10 +54,13 @@ export class MainPanel {
               }
             }
             break;
-          //  case "inform":
-          //   showWindowMessages(message.data); 
-          //  break;
+           case "inform":
+            showWindowMessages(message.data); 
+
+           break;
         }
+        // will recieve requests to persist/get user settings in the workspace
+        await workSpacePersistSwitch({panel:this._panel, message});
       },
       null,
       this._disposables
