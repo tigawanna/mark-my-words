@@ -2,6 +2,7 @@ import {
   Disposable,
   ExtensionContext,
   TextEditorSelectionChangeEvent,
+  Uri,
   ViewColumn,
   WebviewPanel,
   window,
@@ -55,13 +56,13 @@ export class MainPanel {
               }
             }
             break;
-           case "inform":
-            showWindowMessages(message.data); 
+          case "inform":
+            showWindowMessages(message.data);
 
-           break;
+            break;
         }
         // will recieve requests to persist/get user settings in the workspace
-        await workSpacePersistSwitch({panel:this._panel, message});
+        await workSpacePersistSwitch({ panel: this._panel, message });
       },
       null,
       this._disposables
@@ -78,7 +79,7 @@ export class MainPanel {
             selectedText,
           },
         });
-      } catch (error:any) {
+      } catch (error: any) {
         console.error("Error sending selection change:", error);
         window.showErrorMessage("Error sending selection change: ");
       }
@@ -93,12 +94,15 @@ export class MainPanel {
 
   public static async render(context: ExtensionContext) {
     const editor = window.activeTextEditor;
+    const iconPath = Uri.file(context.asAbsolutePath("assets/icon.svg"));
     const selection = editor?.selection;
     const selectedText = editor?.document?.getText(selection) || "";
 
     const panel = window.createWebviewPanel("markMyWords", "Mark My Words", ViewColumn.Beside, {
       enableScripts: true,
+      
     });
+    panel.iconPath = iconPath;
 
     // Dispose the old panel if it exists to avoid multiple instances
     if (MainPanel.currentPanel) {
@@ -106,11 +110,10 @@ export class MainPanel {
     }
 
     MainPanel.currentPanel = new MainPanel(panel, context, selectedText);
-      await MainPanel.currentPanel._panel.webview.postMessage({
-        type: "initialSelectedText",
-        data: selectedText,
-      });
-
+    await MainPanel.currentPanel._panel.webview.postMessage({
+      type: "initialSelectedText",
+      data: selectedText,
+    });
   }
 
   public dispose() {

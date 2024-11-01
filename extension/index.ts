@@ -13,6 +13,7 @@ interface PostTarget {
 }
 
 export function activate(context: ExtensionContext) {
+
   context.subscriptions.push(
     commands.registerCommand("markMyWords.publishSelected", async () => {
       MainPanel.render(context);

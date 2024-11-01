@@ -1,1 +1,1 @@
-{"root":["./extension/env.d.ts","./extension/index.ts","./extension/stores/selection-strore.ts","./extension/utils/config-manager.ts.ts","./extension/views/helper.ts","./extension/views/main-panel.ts","./vite.config.mts"],"version":"5.6.3"}
+{"root":["./extension/env.d.ts","./extension/index.ts","./extension/stores/selection-strore.ts","./extension/utils/info-messages.ts","./extension/utils/workspace-persist.ts","./extension/views/helper.ts","./extension/views/main-panel.ts","./vite.config.mts"],"version":"5.6.3"}
