@@ -34,6 +34,10 @@ adding these hints will auto extract the title and description for you
 // ---Description:This description will be extracted
 ```
 
+> [!WARNING]   
+> your settings are savde in [vscode workspace settings](https://code.visualstudio.com/api/references/vscode-api) take any approprate precautions
+
+> 
 > [!NOTE]   
 > It looks ugly and clutterd but it works. so if you have ideas how to make it look better please let me know
 
