@@ -7,16 +7,15 @@ import "@vscode-elements/elements/dist/vscode-table-row";
 import "@vscode-elements/elements/dist/vscode-table-cell";
 import { PublishTargetBody } from "./PublishTargetBody";
 import { PublishTargetHeaders } from "./PublishTargetHeaders";
-import { usePublishTargetsStore, type PublishTarget } from "@/store/targets-store";
 import { PublishTargetEndpoint } from "./PublishTargetEndpoint";
-import { getNestedProperty } from "../../../utils/helpers";
 import { PostTargetAuthVerification } from "./PostTargetAuthVerification";
 import { getReturnedToken, addTokenToHeaders, testAuthEndpoint } from "./auth-api";
+import { useOnePublishTargetsStore } from "@/store/one-publish-targets-store";
 
 interface PublishTargetAuthFormProps {}
 
 export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
-  const { oneTarget, setOneTargetAuth } = usePublishTargetsStore();
+  const { oneTarget, setOneTargetAuth } = useOnePublishTargetsStore();
   const tokenResponse = getReturnedToken(oneTarget?.auth?.response);
   return (
     <div className="w-[95%] h-full  flex p-5 flex-col items-center justify-center">
@@ -61,15 +60,21 @@ export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
                 <PublishTargetHeaders
                   headers={oneTarget.auth?.headers ?? {}}
                   setFormHeaders={(value) =>
-                    setOneTargetAuth((prev) => ({ ...prev, headers:{
-                      ...prev?.headers,
-                      ...value
-                    } }))
+                    setOneTargetAuth((prev) => ({
+                      ...prev,
+                      headers: {
+                        ...prev?.headers,
+                        ...value,
+                      },
+                    }))
                   }
                   removeFormHeader={(value) =>
-                    setOneTargetAuth((prev) => ({ ...prev, headers:{
-                      ...value
-                    } }))
+                    setOneTargetAuth((prev) => ({
+                      ...prev,
+                      headers: {
+                        ...value,
+                      },
+                    }))
                   }
                 />
               </div>
@@ -82,10 +87,15 @@ export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
               <div className={""}>auth body</div>
               <PublishTargetBody
                 body_data={oneTarget.auth?.body ?? {}}
-                setFormBody={(value) => setOneTargetAuth((prev) => ({ ...prev, body:{
-                  ...prev?.body,
-                  ...value
-                } }))}
+                setFormBody={(value) =>
+                  setOneTargetAuth((prev) => ({
+                    ...prev,
+                    body: {
+                      ...prev?.body,
+                      ...value,
+                    },
+                  }))
+                }
               />
             </div>
           </vscode-tab-panel>
@@ -133,11 +143,12 @@ export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
             }
           </div>
         )}
-        <button className="lg:w-[45%]" onClick={() => testAuthEndpoint(oneTarget)}>
-          test auth endpoint
-        </button>
+        <div className="w-full p-2 flex flex-col items-center  gap-1 text-sm ">
+          <button className="lg:w-[45%]" onClick={() => testAuthEndpoint(oneTarget)}>
+            test auth endpoint
+          </button>
+        </div>
       </div>
     </div>
   );
 }
-

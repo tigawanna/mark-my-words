@@ -37,15 +37,18 @@ export interface OnePublishTarget {
   };
   mappings: Record<string, string>;
 }
-type PublishTargetsState = {
+type ONePublishTargetsState = {
   oneTarget: OnePublishTarget;
   setOneTarget: (value: (prevState: OnePublishTarget) => OnePublishTarget) => void;
+  setOneTargetAuth: (
+    value: (prevState: OnePublishTarget["auth"]) => OnePublishTarget["auth"]
+  ) => void;
   setTonekMappings: (value: string) => void;
   handleSubmitOneTarget: (value: OnePublishTarget) => void;
   handleDeleteOneTarget: (value: OnePublishTarget) => void;
 };
 
-export const usePublishTargetsStore = create<PublishTargetsState>()(
+export const useOnePublishTargetsStore = create<ONePublishTargetsState>()(
   devtools(
     persist(
       (set) => ({
@@ -81,7 +84,7 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
             title: "body.title",
             description: "body.description",
             content: "body.content",
-            "request.token":"headers.Authorization"
+            "request.token": "headers.Authorization",
           },
         },
 
@@ -93,7 +96,18 @@ export const usePublishTargetsStore = create<PublishTargetsState>()(
             };
           });
         },
-
+        setOneTargetAuth: (value) => {
+          set((state) => {
+            const newTargetAuth = value(state.oneTarget.auth);
+            const newTarget = {
+              ...state.oneTarget,
+              auth: newTargetAuth,
+            };
+            return {
+              oneTarget: newTarget,
+            };
+          });
+        },
         handleSubmitOneTarget: (value) => {
           set((state) => {
             const newTarget = state.oneTarget;

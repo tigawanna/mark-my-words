@@ -5,15 +5,16 @@ import "@vscode-elements/elements/dist/vscode-tab-panel";
 import "@vscode-elements/elements/dist/vscode-scrollable";
 import "@vscode-elements/elements/dist/vscode-badge";
 
-import { usePublishTargetsStore } from "@/store/targets-store.ts";
+
 import { PublishTargetHeaders } from "./PublishTargetHeaders.tsx";
 import { PublishTargetBody } from "./PublishTargetBody.tsx";
 import { PublishTargetAuthForm } from "./PublishTargetAuthForm.tsx";
+import { useOnePublishTargetsStore } from "@/store/one-publish-targets-store.ts";
 
 interface PublishTargetFormTabsProps {}
 // scured tab
 export function PublishTargetFormTabs({}: PublishTargetFormTabsProps) {
-  const { oneTarget, setOneTarget } = usePublishTargetsStore();
+  const { oneTarget, setOneTarget } = useOnePublishTargetsStore();
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-5  rounded-md">
       <vscode-tabs selected-index={2} panel class="panel-example  gap-3">

@@ -1,7 +1,7 @@
 import { window } from "vscode";
 type MessageTypes = "success" | "error" | "info" | "warning";
 
-type TShowMessages = {
+export type TShowMessages = {
   message: string;
   type: MessageTypes;
 };
