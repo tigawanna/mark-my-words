@@ -8,12 +8,13 @@ import { PublishTargetHeaders } from "./PublishTargetHeaders.tsx";
 import { PublishTargetBody } from "./PublishTargetBody.tsx";
 import { PublishTargetAuthForm } from "./PublishTargetAuthForm.tsx";
 import { useOnePublishTargetsStore } from "@/store/one-publish-targets-store.ts";
+import { PublishTargetMappings } from "./PublishTargetMappings.tsx";
 
 interface PublishTargetFormTabsProps {}
 // scured tab
 export function PublishTargetFormTabs({}: PublishTargetFormTabsProps) {
   const { oneTarget, setOneTarget } = useOnePublishTargetsStore();
- 
+
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-5  rounded-md">
       <vscode-tabs selected-index={2} panel class="panel-example  gap-3">
@@ -34,17 +35,15 @@ export function PublishTargetFormTabs({}: PublishTargetFormTabsProps) {
           <vscode-scrollable>
             <PublishTargetHeaders
               headers={oneTarget.headers}
-              setFormHeaders={(value) =>{
-                console.log("=== new headers === ",value)
+              setFormHeaders={(value) => {
+                console.log("=== new headers === ", value);
                 setOneTarget((prev) => ({
                   ...prev,
                   headers: {
                     ...value,
                   },
-                }))
-
-              }
-              }
+                }));
+              }}
               removeFormHeader={(value) =>
                 setOneTarget((prev) => ({
                   ...prev,
@@ -76,6 +75,20 @@ export function PublishTargetFormTabs({}: PublishTargetFormTabsProps) {
           <vscode-scrollable>
             <PublishTargetAuthForm />
           </vscode-scrollable>
+        </vscode-tab-panel>
+        <vscode-tab-header slot="header">Mappings</vscode-tab-header>
+        <vscode-tab-panel class="w-full">
+          <PublishTargetMappings
+            mappings={oneTarget.mappings}
+            setFormMappings={(value) => {
+              setOneTarget((prev) => ({
+                ...prev,
+                mappings: {
+                  ...value,
+                },
+              }));
+            }}
+          />
         </vscode-tab-panel>
       </vscode-tabs>
     </div>

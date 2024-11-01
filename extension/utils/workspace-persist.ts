@@ -132,6 +132,7 @@ export class OneTargetConfigurationManager {
         .getConfiguration()
         .update(this.CONFIG_KEY, newPublishTarget, vscode.ConfigurationTarget.Global);
       // return this.getPublishTargets();
+      vscode.window.showInformationMessage("Target added");
     } catch (error) {
       vscode.window.showErrorMessage(" Something went wrong adding " + (error as Error).message);
       // return this.getPublishTargets();
@@ -143,6 +144,7 @@ export class OneTargetConfigurationManager {
       await vscode.workspace
         .getConfiguration()
         .update(this.CONFIG_KEY, target, vscode.ConfigurationTarget.Global);
+        vscode.window.showInformationMessage("Target updated");
     } catch (error) {
       vscode.window.showErrorMessage(" Something went wrong updating " + (error as Error).message);
     }
@@ -172,6 +174,7 @@ export class OneTargetConfigurationManager {
       await vscode.workspace
         .getConfiguration()
         .update(this.CONFIG_KEY, {}, vscode.ConfigurationTarget.Global);
+                vscode.window.showInformationMessage("Target deleted");
     } catch (error) {
       vscode.window.showErrorMessage(" Something went wrong deleting " + (error as Error).message);
     }

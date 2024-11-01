@@ -3,7 +3,8 @@ import { PublishTargetBody } from "./PublishTargetBody";
 import { PublishTargetHeaders } from "./PublishTargetHeaders";
 import { PublishTargetEndpoint } from "./PublishTargetEndpoint";
 import { testAuthVerificationEndpoint } from "./auth-api";
-
+import { useMutation } from "@/hooks/use-mutation";
+import "@vscode-elements/elements/dist/vscode-icon";
 interface PostTargetAuthVerificationProps {
   oneTarget: PublishTarget;
   setOneTargetAuth: (value: (prevState: PublishTarget["auth"]) => PublishTarget["auth"]) => void;
@@ -23,6 +24,18 @@ export function PostTargetAuthVerification({
     method: oneTarget?.auth?.verification?.method ?? "POST",
     response: oneTarget?.auth?.verification?.response ?? {},
   };
+  const mutation = useMutation({
+    mutationFn: testAuthVerificationEndpoint,
+    onSuccess: (data) => {
+      setOneTargetAuth((prevAuth) => ({
+        ...prevAuth,
+        verification: {
+          ...prevAuth?.verification,
+          response: data,
+        },
+      }));
+    },
+  })
   return (
     <div className="w-full h-full flex bg-vscode-widget-shadow flex-col gap-2 p-5  rounded-lg items-center justify-center">
       <div className="w-full h-full flex flex-col gap-1 ">
@@ -96,7 +109,18 @@ export function PostTargetAuthVerification({
           }
         />
       </div>
-      <button className={"w-[40%]"} onClick={() => testAuthVerificationEndpoint(oneTarget)}>Test Auth Verification</button>
+      <button className={"w-[40%]"} onClick={() => mutation.mutate(oneTarget)}>
+        Test Auth Verification
+        {mutation.isLoading && (
+          <vscode-icon
+            class="animate-spin"
+            label="Close Panel"
+            title="Close Panel"
+            name="settings-gear"
+            slot="addons"
+            action-icon></vscode-icon>
+        )}
+      </button>
     </div>
   );
 }

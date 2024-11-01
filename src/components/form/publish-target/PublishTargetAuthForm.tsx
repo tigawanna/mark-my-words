@@ -11,12 +11,18 @@ import { PublishTargetEndpoint } from "./PublishTargetEndpoint";
 import { PostTargetAuthVerification } from "./PostTargetAuthVerification";
 import { getReturnedToken, addTokenToHeaders, testAuthEndpoint } from "./auth-api";
 import { useOnePublishTargetsStore } from "@/store/one-publish-targets-store";
+import { useMutation } from "@/hooks/use-mutation";
 
 interface PublishTargetAuthFormProps {}
 
 export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
   const { oneTarget, setOneTargetAuth } = useOnePublishTargetsStore();
   const tokenResponse = getReturnedToken(oneTarget?.auth?.response);
+  const mutation = useMutation({
+    mutationFn(variables) {
+      return testAuthEndpoint(variables);
+    }
+  })
   return (
     <div className="w-[95%] h-full  flex p-5 flex-col items-center justify-center">
       <div className="w-full h-full flex flex-col gap-1 ">
@@ -125,27 +131,28 @@ export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
                 {tokenResponse.responseToken}
               </p>
             </div>
-            {
-              <div className="w-full p-2 flex flex-col items-center  gap-1 text-sm ">
-                <button
-                  disabled={!oneTarget.auth?.response}
-                  className="sm:w-[45%]"
-                  onClick={() => addTokenToHeaders(oneTarget.auth?.response)}>
-                  Add to headers
-                </button>
-                <button
-                  disabled={!oneTarget.auth?.response}
-                  className="sm:w-[45%]"
-                  onClick={() => addTokenToHeaders(oneTarget.auth?.response)}>
-                  Add to headers
-                </button>
-              </div>
-            }
           </div>
         )}
-        <div className="w-full p-2 flex flex-col items-center  gap-1 text-sm ">
-          <button className="lg:w-[45%]" onClick={() => testAuthEndpoint(oneTarget)}>
+        <div className="w-full p-2 flex items-center  gap-1 text-sm ">
+          {oneTarget.auth?.response && (
+            <button
+              disabled={!oneTarget.auth?.response}
+              className="sm:w-[45%]"
+              onClick={() => addTokenToHeaders(oneTarget.auth?.response)}>
+              Add to headers
+            </button>
+          )}
+          <button className="lg:w-[45%]" onClick={() => mutation.mutate(oneTarget)}>
             test auth endpoint
+            {mutation.isLoading && (
+              <vscode-icon
+              class="animate-spin"
+                label="Close Panel"
+                title="Close Panel"
+                name="settings-gear"
+                slot="addons"
+                action-icon></vscode-icon>
+            )}
           </button>
         </div>
       </div>

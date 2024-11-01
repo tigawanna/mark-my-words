@@ -29,17 +29,15 @@
     "configuration": {
       "title": "Mark My Words",
       "properties": {
-        "properties": {
-          "markMyWords.publishTargets":{
-            "type": "array",
-            "default": [],
-            "description": "Configured publish targets"
-          },
-          "markMyWords.onePublishTargets": {
-            "type": "object",
-            "default": {},
-            "description": "One configured publish target"
-          }
+        "markMyWords.publishTargets": {
+          "type": "array",
+          "default": [],
+          "description": "Configured publish targets"
+        },
+        "markMyWords.onePublishTargets": {
+          "type": "object",
+          "default": {},
+          "description": "One configured publish target"
         },
         "markMyWords.maxHistorySize": {
           "type": "number",

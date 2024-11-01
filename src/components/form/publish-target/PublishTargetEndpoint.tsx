@@ -14,6 +14,8 @@ export function MethodsSelect({ method, setMethod }: MethodsSelectProps) {
   useEffect(() => {
     const select = selectRef?.current;
     const selectEventListener = (_: Event) => {
+      if(select?.value === method) return;
+      if(select?.value.length === 0) return;
       setMethod(select?.value as PublishTarget["method"]);
     };
     select?.addEventListener("change", selectEventListener);
