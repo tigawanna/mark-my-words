@@ -12,7 +12,6 @@ export function PublishDetailsForm({}: PublishDetailsFormProps) {
   const { formdata } = usePublishFormsStore();
   useEffect(() => {
     const remappedFields = mapFieldsToValues(formdata, oneTarget);
-    console.log(" ==== remappedFields ====", remappedFields);
     setOneTarget((prev) => ({
       ...prev,
       body:remappedFields.body,
