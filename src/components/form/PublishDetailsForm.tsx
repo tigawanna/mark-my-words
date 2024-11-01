@@ -1,10 +1,23 @@
 import { usePublishFormsStore } from "@/store/publish-form-store";
+import { doPublish } from "./publish-target/auth-api";
+import { useOnePublishTargetsStore } from "@/store/one-publish-targets-store";
+import { useEffect } from "preact/hooks";
+import { getNestedProperty, mapFieldsToValues } from "@/utils/helpers";
 
 
 interface PublishDetailsFormProps {}
 
 export function PublishDetailsForm({}: PublishDetailsFormProps) {
+  const { oneTarget,setOneTarget } = useOnePublishTargetsStore();
   const { formdata } = usePublishFormsStore();
+  useEffect(() => {
+    const remappedFields = mapFieldsToValues(formdata, oneTarget);
+    console.log(" ==== remappedFields ====", remappedFields);
+    setOneTarget((prev) => ({
+      ...prev,
+      body:remappedFields.body,
+    }));
+  }, [formdata])
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
       <form className="w-full h-full flex flex-col gap-2 items-center justify-center">
@@ -30,7 +43,9 @@ export function PublishDetailsForm({}: PublishDetailsFormProps) {
               name="descriptioon"
               value={formdata.description}
               onChange={(e) =>
-                usePublishFormsStore.getState().updateFormData({ description: e.currentTarget.value })
+                usePublishFormsStore
+                  .getState()
+                  .updateFormData({ description: e.currentTarget.value })
               }
             />
           </label>
@@ -47,6 +62,17 @@ export function PublishDetailsForm({}: PublishDetailsFormProps) {
             }
           />
         </label>
+          <button
+            className=" max-w-[70%]  flex  justify-center gap-4 items-center"
+            onClick={() => doPublish(formdata,oneTarget)}>
+            publish
+            <vscode-icon
+              label="delete publish target"
+              title="delete publish target"
+              name="trash"
+              slot="addons"
+              action-icon></vscode-icon>
+          </button>
       </form>
     </div>
   );

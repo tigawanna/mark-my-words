@@ -1,3 +1,6 @@
+import { OnePublishTarget } from "@/store/one-publish-targets-store";
+import { PublishForm } from "@/store/publish-form-store";
+
 export function getNestedProperty(obj: any, path: string): any {
   const keys = path.split(".");
   return keys.reduce((acc, key) => {
@@ -39,14 +42,62 @@ export function extractTitleAndDescription(content: string) {
   return { ...inferredLabels, content: linesWithoutTitleAndDescription };
 }
 
-
 export function addBaseUrlToUrl(url: string, baseUrl?: string) {
-  if(!baseUrl) {
+  if (!baseUrl) {
     return url;
   }
   if (url.trim().startsWith("http")) {
     return url;
   }
+  return new URL(url, baseUrl).toString();
+}
 
-  return `${baseUrl.replace(/\/$/, "").trim()}/${url.replace(/^\//, "").trim()}`;
+export function mapFieldsToValues(
+  formdata: PublishForm,
+  oneTarget: OnePublishTarget
+): OnePublishTarget {
+  if (!oneTarget || !formdata || !oneTarget?.mappings) {
+    return oneTarget;
+  }
+  return Object.entries(oneTarget?.mappings).reduce(
+    (acc, [key, value], idx) => {
+      const mapTo = value.split(".");
+      switch (key) {
+        case "formData.title":
+          // @ts-expect-error
+          acc[mapTo[0]] = {
+            // @ts-expect-error
+            ...acc[mapTo?.[0]],
+            [mapTo[1]]: formdata.title,
+          };
+          break;
+        case "formData.description":
+          // @ts-expect-error
+          acc[mapTo[0]] = {
+            // @ts-expect-error
+            ...acc[mapTo?.[0]],
+            [mapTo[1]]: formdata.description,
+          };
+          break;
+        case "formData.content":
+          // @ts-expect-error
+          acc[mapTo[0]] = {
+            // @ts-expect-error
+            ...acc[mapTo?.[0]],
+            [mapTo[1]]: formdata.content,
+          };
+          break;
+        default:
+          // @ts-expect-error
+          acc[mapTo[0]] = {
+            // @ts-expect-error
+            ...acc[mapTo?.[0]],
+            [mapTo[1]]: getNestedProperty(oneTarget, value),
+          };
+          break;
+      }
+      return acc;
+    },
+    { ...oneTarget }
+  );
 }

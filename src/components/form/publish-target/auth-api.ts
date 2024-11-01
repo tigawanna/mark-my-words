@@ -1,6 +1,7 @@
-import { usePublishTargetsStore, PublishTarget } from "@/store/targets-store";
-import { vscode } from "@/utils";
-import { getNestedProperty } from "@/utils/helpers";
+import { useOnePublishTargetsStore, OnePublishTarget } from "@/store/one-publish-targets-store";
+import { PublishForm } from "@/store/publish-form-store";
+import { getNestedProperty, mapFieldsToValues } from "@/utils/helpers";
+import { postInformMessages } from "@/utils/post-messages";
 
 interface IAuthWrapperProps {
   endpoint: string;
@@ -17,7 +18,7 @@ export async function fetchWrapper({ endpoint, headers, body, method }: IAuthWra
       "Content-Type": "application/json",
       ...headers,
     },
-    body: JSON.stringify(body),
+    body:method==="GET"?undefined: JSON.stringify(body),
   }).then((res) => {
     if (!res.ok) {
       throw new Error(res.statusText);
@@ -28,7 +29,7 @@ export async function fetchWrapper({ endpoint, headers, body, method }: IAuthWra
 
 export function addTokenToHeaders(authResponse?: Record<string, string>) {
   if (!authResponse) {return;}
-  const updateHeaders = usePublishTargetsStore.getState().setOneTarget;
+  const updateHeaders = useOnePublishTargetsStore.getState().setOneTarget;
   const tokenRespose = getReturnedToken(authResponse);
   if (!tokenRespose) {return;}
   const { addTokenTo, responseToken } = tokenRespose;
@@ -39,11 +40,21 @@ export function addTokenToHeaders(authResponse?: Record<string, string>) {
       ...prevTarget.headers,
       [tokenkey]: responseToken,
     },
+    auth:{
+      ...prevTarget.auth,
+      verification:{
+        ...prevTarget.auth?.verification,
+        headers: {
+          ...prevTarget.auth?.verification?.headers,
+          [tokenkey]: responseToken
+        }
+      }
+    }
   }));
 }
 export function getReturnedToken(authResponse?: Record<string, string>) {
   if (!authResponse) {return;}
-  const tokenLocation = usePublishTargetsStore.getState().oneTarget.auth?.tokenMappedTo;
+  const tokenLocation = useOnePublishTargetsStore.getState().oneTarget.auth?.tokenMappedTo;
   if (!tokenLocation) {return;}
   // sample token location is mapped as such "request.token,headers.Authorization"
   const tokenLocations = tokenLocation.split(",");
@@ -55,23 +66,26 @@ export function getReturnedToken(authResponse?: Record<string, string>) {
   }
 }
 
-export async function testAuthEndpoint(oneTarget: PublishTarget) {
+export async function testAuthEndpoint(oneTarget: OnePublishTarget) {
   try {
-    const updateAuth = usePublishTargetsStore.getState().setOneTargetAuth;
+    const updateAuth = useOnePublishTargetsStore.getState().setOneTargetAuth;
     if (!oneTarget?.auth || !oneTarget?.auth?.endpoint) {
       throw new Error("no auth object");
     }
+    console.log(" === testAuthEndpoint ===", oneTarget?.auth);
     const { endpoint, headers, body, method } = oneTarget?.auth;
     const authResponse = await fetchWrapper({ endpoint, headers, body, method });
     updateAuth((prevAuth) => ({ ...prevAuth, response: authResponse }));
+    postInformMessages({ message:"Authentication success", type:"info" });
     return authResponse;
   } catch (error: any) {
-    console.error(" === testAuthEndpoint error ===", error.message);
+    console.log(" === testAuthEndpoint error ===", error);
+    postInformMessages({ message:"Authentication failed", type:"error" });
   }
 }
-export async function testAuthVerificationEndpoint(oneTarget: PublishTarget) {
+export async function testAuthVerificationEndpoint(oneTarget: OnePublishTarget) {
   try {
-    const updateAuth = usePublishTargetsStore.getState().setOneTargetAuth;
+    const updateAuth = useOnePublishTargetsStore.getState().setOneTargetAuth;
     if (!oneTarget?.auth?.verification || !oneTarget?.auth?.verification?.endpoint) {
       throw new Error("no auth verification object");
     }
@@ -81,15 +95,24 @@ export async function testAuthVerificationEndpoint(oneTarget: PublishTarget) {
       ...prevAuth?.verification,
       response: authResponse
     } }));
-    vscode.postMessage({
-      type:"inform",
-      data:{
-        type:"info",
-        message:"Authentication verification success"
-      }
-    })
+    postInformMessages({ message:"Authentication verification success", type:"info" });
     return authResponse;
   } catch (error: any) {
-    console.error(" === testAuthVerificationEndpoint error ===", error.message);
+    console.log(" === testAuthVerificationEndpoint error ===", error.message);
+    postInformMessages({ message:"Authentication verification failed", type:"error" });
   }
 }
+
+export async function doPublish(formdata: PublishForm,oneTarget: OnePublishTarget) {
+  try {
+    const { endpoint, headers, body, method } = mapFieldsToValues(formdata, oneTarget);
+    const authResponse = await fetchWrapper({ endpoint, headers, body, method });
+    postInformMessages({ message:"Publish success", type:"info" });
+    return authResponse;
+  } catch (error: any) {
+    console.log(" === doPublish error ===", error.message);
+    postInformMessages({ message:"Publish failed", type:"error" });
+  }
+}
+
+

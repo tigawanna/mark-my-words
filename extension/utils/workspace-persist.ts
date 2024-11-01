@@ -10,7 +10,7 @@ export interface PostTarget {
   body: Record<string, string>;
 }
 
-export class ConfigurationManager {
+export class TargetsConfigurationManager {
   private static readonly CONFIG_KEY = "markMyWords.publishTargets";
   // add a publish target variab;e that will be mutated on every operation
   // remember to add to package.json
@@ -97,6 +97,86 @@ export class ConfigurationManager {
     }
   }
 }
+export class OneTargetConfigurationManager {
+  private static readonly CONFIG_KEY = "markMyWords.onePublishTargets";
+  // add a publish target variab;e that will be mutated on every operation
+  // remember to add to package.json
+  // "configuration": {
+  //   "title": "Mark My Words",
+  //   "properties": {
+  //     "properties": {
+        // "markMyWords.onePublishTargets":{
+        //   "type": "object",
+        //   "default": {},
+        //   "description": "One configured publish target"
+        // }
+  //     },}
+
+  public static getOnePublishTarget(): PostTarget {
+    const config = vscode.workspace.getConfiguration();
+    return (
+      config.get<PostTarget>(this.CONFIG_KEY) || {
+        id: "",
+        name: "",
+        endpoint: "",
+        method: "GET",
+        headers: {},
+        body: {},
+      }
+    );
+  }
+
+  public static async addPublishTarget(newPublishTarget: PostTarget): Promise<void> {
+    try {
+      await vscode.workspace
+        .getConfiguration()
+        .update(this.CONFIG_KEY, newPublishTarget, vscode.ConfigurationTarget.Global);
+      // return this.getPublishTargets();
+    } catch (error) {
+      vscode.window.showErrorMessage(" Something went wrong adding " + (error as Error).message);
+      // return this.getPublishTargets();
+    }
+  }
+
+  public static async updatePublishTarget(target: PostTarget): Promise<void> {
+    try {
+      await vscode.workspace
+        .getConfiguration()
+        .update(this.CONFIG_KEY, target, vscode.ConfigurationTarget.Global);
+    } catch (error) {
+      vscode.window.showErrorMessage(" Something went wrong updating " + (error as Error).message);
+    }
+  }
+  public static async handleSubmitPublishTarget(target: PostTarget) {
+    try {
+      if (!target) {
+        return;
+      }
+      if (!target.id) {
+        return this.addPublishTarget(target);
+      }
+    return this.updatePublishTarget(target);
+    } catch (error) {
+      vscode.window.showErrorMessage(
+        " Something went wrong submitting " + (error as Error).message
+      );
+      // return this.getPublishTargets();
+    }
+  }
+
+  public static async deletePublishTarget(target: PostTarget) {
+    try {
+      if (!target || !target.id) {
+        return;
+      }
+      await vscode.workspace
+        .getConfiguration()
+        .update(this.CONFIG_KEY, {}, vscode.ConfigurationTarget.Global);
+    } catch (error) {
+      vscode.window.showErrorMessage(" Something went wrong deleting " + (error as Error).message);
+    }
+  }
+}
 
 export async function workSpacePersistSwitch({
   panel,
@@ -110,16 +190,16 @@ export async function workSpacePersistSwitch({
 }) {
   switch (message.type) {
     case "handleSubmittedPublishTargets":
-      await ConfigurationManager.handleSubmitPublishTarget(message.data);
+      await OneTargetConfigurationManager.handleSubmitPublishTarget(message.data);
       break;
     case "deletePublishTargets":
-      await ConfigurationManager.deletePublishTarget(message.data);
+      await OneTargetConfigurationManager.deletePublishTarget(message.data);
       break;
-    case "getPublishTargets":
-      const currentTargets = ConfigurationManager.getPublishTargets();
+    case "getOnePublishTarget":
+      const currentTarget = OneTargetConfigurationManager.getOnePublishTarget();
       await panel.webview.postMessage({
-        type: "publishTargets",
-        data: currentTargets,
+        type: "onePublishTarget",
+        data: currentTarget,
       });
       break;
   }

@@ -81,9 +81,9 @@ export const useOnePublishTargetsStore = create<ONePublishTargetsState>()(
             tokenMappedTo: "request.token,headers.Authorization",
           },
           mappings: {
-            title: "body.title",
-            description: "body.description",
-            content: "body.content",
+            "formData.title": "body.title",
+            "formData.description": "body.description",
+            "formData.content": "body.content",
             "request.token": "headers.Authorization",
           },
         },

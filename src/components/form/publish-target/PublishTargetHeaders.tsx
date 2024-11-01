@@ -15,6 +15,7 @@ interface PublishTargetHeadersProps {
 }
 
 export function PublishTargetHeaders({ headers, setFormHeaders,removeFormHeader }: PublishTargetHeadersProps) {
+   console.log("oneTarget headers ==== ", headers);
   const [editing, setEditing] = useState(false);
   const [header, setHeader] = useState<{ key: string; value: string }>({
     key: "",
@@ -29,6 +30,7 @@ export function PublishTargetHeaders({ headers, setFormHeaders,removeFormHeader 
       value: "",
     });
   };
+
   return (
     <div className="flex flex-col gap-2 w-full">
       <div className="flex gap-2 w-full">
@@ -76,7 +78,7 @@ export function PublishTargetHeaders({ headers, setFormHeaders,removeFormHeader 
           <vscode-table-header-cell>Value</vscode-table-header-cell>
         </vscode-table-header>
         <vscode-table-body slot="body">
-          {Object.entries(headers).map(([key, value]) => {
+          {headers&&Object?.entries(headers)?.map(([key, value]) => {
             return (
               <vscode-table-row key={key}>
                 <vscode-table-cell>{key}</vscode-table-cell>
@@ -89,11 +91,6 @@ export function PublishTargetHeaders({ headers, setFormHeaders,removeFormHeader 
                           name="check"
                           class="hover:text-vscode-list-focusForeground hover:outline p-1 hover:outline-vscode-focusBorder"
                           onClick={() => {
-                            // setFormHeaders((prev) => {
-                            //   const newHeaders = { ...prev.headers };
-                            //   newHeaders[key] = header.value;
-                            //   return { ...prev, headers: newHeaders };
-                            // });
                             setFormHeaders({ ...headers, [key]: value });
                             setHeader({ key: "", value: "" });
                             setEditing(false);
@@ -116,9 +113,9 @@ export function PublishTargetHeaders({ headers, setFormHeaders,removeFormHeader 
                           //   delete newHeaders[key];
                           //   return { ...prev, headers: newHeaders };
                           // });
-                            const newHeaders = { ...headers };
-                            delete newHeaders[key];
-                            removeFormHeader(newHeaders);
+                          const newHeaders = { ...headers };
+                          delete newHeaders[key];
+                          removeFormHeader(newHeaders);
                         }}></vscode-icon>
                     </div>
                   </div>

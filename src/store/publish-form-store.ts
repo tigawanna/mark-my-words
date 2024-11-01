@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { devtools} from "zustand/middleware";
 
 
-interface PublishForm {
+export interface PublishForm {
   title: string;
   description: string;
   content:string

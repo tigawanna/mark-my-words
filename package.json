@@ -34,6 +34,11 @@
             "type": "array",
             "default": [],
             "description": "Configured publish targets"
+          },
+          "markMyWords.onePublishTargets": {
+            "type": "object",
+            "default": {},
+            "description": "One configured publish target"
           }
         },
         "markMyWords.maxHistorySize": {

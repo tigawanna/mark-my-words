@@ -18,7 +18,7 @@ export function PostTargetAuthVerification({
     body: oneTarget?.auth?.verification?.body ?? {},
     endpoint: oneTarget?.auth?.verification?.endpoint ?? "https://example.com",
     headers: oneTarget?.auth?.verification?.headers ?? {
-      Authorization: "",
+      Authorization:oneTarget.auth?.response?.token,
     },
     method: oneTarget?.auth?.verification?.method ?? "POST",
     response: oneTarget?.auth?.verification?.response ?? {},

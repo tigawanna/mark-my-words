@@ -6,7 +6,7 @@ interface PublicationTargetFormContainerProps {}
 
 export function PublicationTargetFormContainer({}: PublicationTargetFormContainerProps) {
   const { oneTarget, setOneTarget,handleSubmitOneTarget,handleDeleteOneTarget } = useOnePublishTargetsStore();
-
+console.log(" oneTAget === ",oneTarget)
   return (
     <div className="w-full h-full flex border-t pt-5 mt-5 flex-col items-center justify-center">
       <h1 className="text-xl ">Publish Target {oneTarget.name}</h1>
@@ -54,6 +54,7 @@ export function PublicationTargetFormContainer({}: PublicationTargetFormContaine
             action-icon></vscode-icon>
         </button>
       </div>
+
     </div>
   );
 }

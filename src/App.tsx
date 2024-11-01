@@ -4,14 +4,12 @@ import { vscode } from "./utils";
 import { usePublishFormsStore } from "./store/publish-form-store";
 import { extractTitleAndDescription } from "./utils/helpers";
 import { MainContainer } from "./components/MainContainer";
-import { usePublishTargetsStore } from "./store/targets-store";
+import { useOnePublishTargetsStore } from "./store/one-publish-targets-store";
 
 export function App() {
   const updateFormData = usePublishFormsStore((state) => state.updateFormData);
-  const setTargets = usePublishTargetsStore((state) => state.setTargets);
-  const targets = usePublishTargetsStore((state) => state.targets);
+  const setOneTarget = useOnePublishTargetsStore((state) => state.setOneTarget);
 
-  // ✅
   useEffect(() => {
     vscode.postMessage({
       type: "ready",
@@ -24,6 +22,24 @@ export function App() {
       const message = event.data;
       switch (message.type) {
         case "initialPayload":
+            if (message.data) {
+            if (message.data.publishTargets && message.data.publishTargets.length > 1) {
+            setOneTarget(() => {
+              return message.data?.onePublishTarget;
+            });
+            }
+            if (message.data.selectedText && message.data.selectedText.length > 1) {
+              const inferredLabels = extractTitleAndDescription(message.data.selectedText);
+              if (inferredLabels) {
+                updateFormData({
+                  content: inferredLabels.content,
+                  title: inferredLabels.title,
+                  description: inferredLabels.description,
+                });
+              }
+            }
+          }
+          break;
         case "selectedText":
         case "selectionChanged":
           if (message.data) {
@@ -44,12 +60,10 @@ export function App() {
             }
           }
           break;
-        case "publishTargets":
-          if (message.data && message.data.length > 0) {
-            setTargets((prevTargets) => {
-              return [...prevTargets, ...message.data];
-            });
-          }
+        case "onePublishTarget":
+          setOneTarget(() => {
+            return message.data;
+          });
           break;
       }
     };
@@ -61,10 +75,6 @@ export function App() {
         title: "",
         description: "",
       });
-      // vscode.postMessage({
-      //   type: "updatePublishTarget",
-      //   data: targets,
-      // });
       window.removeEventListener("message", messageListener);
     };
   }, []);

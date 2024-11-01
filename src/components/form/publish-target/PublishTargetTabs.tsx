@@ -4,8 +4,6 @@ import "@vscode-elements/elements/dist/vscode-tab-header";
 import "@vscode-elements/elements/dist/vscode-tab-panel";
 import "@vscode-elements/elements/dist/vscode-scrollable";
 import "@vscode-elements/elements/dist/vscode-badge";
-
-
 import { PublishTargetHeaders } from "./PublishTargetHeaders.tsx";
 import { PublishTargetBody } from "./PublishTargetBody.tsx";
 import { PublishTargetAuthForm } from "./PublishTargetAuthForm.tsx";
@@ -15,6 +13,7 @@ interface PublishTargetFormTabsProps {}
 // scured tab
 export function PublishTargetFormTabs({}: PublishTargetFormTabsProps) {
   const { oneTarget, setOneTarget } = useOnePublishTargetsStore();
+ 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-5  rounded-md">
       <vscode-tabs selected-index={2} panel class="panel-example  gap-3">
@@ -35,14 +34,16 @@ export function PublishTargetFormTabs({}: PublishTargetFormTabsProps) {
           <vscode-scrollable>
             <PublishTargetHeaders
               headers={oneTarget.headers}
-              setFormHeaders={(value) =>
+              setFormHeaders={(value) =>{
+                console.log("=== new headers === ",value)
                 setOneTarget((prev) => ({
                   ...prev,
                   headers: {
-                    ...prev.headers,
                     ...value,
                   },
                 }))
+
+              }
               }
               removeFormHeader={(value) =>
                 setOneTarget((prev) => ({
@@ -64,7 +65,6 @@ export function PublishTargetFormTabs({}: PublishTargetFormTabsProps) {
               setOneTarget((prev) => ({
                 ...prev,
                 body: {
-                  ...prev.body,
                   ...value,
                 },
               }))
