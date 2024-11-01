@@ -15,7 +15,6 @@ interface PublishTargetHeadersProps {
 }
 
 export function PublishTargetHeaders({ headers, setFormHeaders,removeFormHeader }: PublishTargetHeadersProps) {
-   console.log("oneTarget headers ==== ", headers);
   const [editing, setEditing] = useState(false);
   const [header, setHeader] = useState<{ key: string; value: string }>({
     key: "",
@@ -108,11 +107,6 @@ export function PublishTargetHeaders({ headers, setFormHeaders,removeFormHeader 
                         name="chrome-close"
                         class="hover:text-vscode-errorForeground hover:outline p-1 hover:outline-vscode-errorForeground"
                         onClick={() => {
-                          // setFormHeaders((prev) => {
-                          //   const newHeaders = { ...prev.headers };
-                          //   delete newHeaders[key];
-                          //   return { ...prev, headers: newHeaders };
-                          // });
                           const newHeaders = { ...headers };
                           delete newHeaders[key];
                           removeFormHeader(newHeaders);
