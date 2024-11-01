@@ -30,50 +30,63 @@ export class ConfigurationManager {
     return config.get<PostTarget[]>(this.CONFIG_KEY) || [];
   }
 
-  public static async addPublishTarget(target: PostTarget): Promise<PostTarget[]> {
+  public static async addPublishTarget(target: PostTarget, targets?: PostTarget[]): Promise<void> {
     try {
-      const currentTargets = this.getPublishTargets();
-      const updatedTargets = [...currentTargets, target];
-
+      const updatedTargets = [...(targets ?? []), target];
       await vscode.workspace
         .getConfiguration()
         .update(this.CONFIG_KEY, updatedTargets, vscode.ConfigurationTarget.Global);
-      return this.getPublishTargets();
+      // return this.getPublishTargets();
     } catch (error) {
       vscode.window.showErrorMessage(" Something went wrong adding " + (error as Error).message);
-      return this.getPublishTargets();
+      // return this.getPublishTargets();
     }
   }
 
   public static async updatePublishTarget(
-    targetId: string,
-    updatedTarget: PostTarget
-  ): Promise<PostTarget[]> {
+    targetIndex: number,
+    target: PostTarget,
+    targets: PostTarget[]
+  ): Promise<void> {
     try {
-      const currentTargets = this.getPublishTargets();
-      const targetIndex = currentTargets.findIndex((t) => t.id === targetId);
-
-      if (targetIndex === -1) {
-        throw new Error(`Target with ID ${targetId} not found`);
-      }
-
-      currentTargets[targetIndex] = updatedTarget;
-
+      targets[targetIndex] = target;
       await vscode.workspace
         .getConfiguration()
-        .update(this.CONFIG_KEY, currentTargets, vscode.ConfigurationTarget.Global);
-      return this.getPublishTargets();
+        .update(this.CONFIG_KEY, targets, vscode.ConfigurationTarget.Global);
     } catch (error) {
       vscode.window.showErrorMessage(" Something went wrong updating " + (error as Error).message);
-      return this.getPublishTargets();
+    }
+  }
+  public static async handleSubmitPublishTarget(target: PostTarget) {
+    try {
+      if (!target) {
+        return;
+      }
+      const currentTargets = this.getPublishTargets();
+      if (!target.id) {
+        return this.addPublishTarget(target, currentTargets);
+      }
+      const targetIndex = currentTargets.findIndex((t) => t.id === target?.id);
+      // create new
+      if (targetIndex === -1) {
+        return this.addPublishTarget(target);
+      }
+      return this.updatePublishTarget(targetIndex, target, currentTargets);
+    } catch (error) {
+      vscode.window.showErrorMessage(
+        " Something went wrong submitting " + (error as Error).message
+      );
+      // return this.getPublishTargets();
     }
   }
 
-  public static async deletePublishTarget(targetId: string): Promise<PostTarget[]> {
+  public static async deletePublishTarget(target: PostTarget) {
     try {
+      if (!target || !target.id) {
+        return;
+      }
       const currentTargets = this.getPublishTargets();
-      const updatedTargets = currentTargets.filter((t) => t.id !== targetId);
-
+      const updatedTargets = currentTargets.filter((t) => t.id !== target?.id);
       await vscode.workspace
         .getConfiguration()
         .update(this.CONFIG_KEY, updatedTargets, vscode.ConfigurationTarget.Global);
@@ -96,38 +109,17 @@ export async function workSpacePersistSwitch({
   };
 }) {
   switch (message.type) {
+    case "handleSubmittedPublishTargets":
+      await ConfigurationManager.handleSubmitPublishTarget(message.data);
+      break;
+    case "deletePublishTargets":
+      await ConfigurationManager.deletePublishTarget(message.data);
+      break;
     case "getPublishTargets":
       const currentTargets = ConfigurationManager.getPublishTargets();
       await panel.webview.postMessage({
         type: "publishTargets",
         data: currentTargets,
-      });
-      break;
-
-    case "addPublishTarget":
-      const addedTargets = await ConfigurationManager.addPublishTarget(message.data);
-      await panel.webview.postMessage({
-        type: "publishTargets",
-        data: addedTargets,
-      });
-      break;
-
-    case "updatePublishTarget":
-      const targetsAfterUpdate = await ConfigurationManager.updatePublishTarget(
-        message.data.id,
-        message.data.target
-      );
-      await panel.webview.postMessage({
-        type: "publishTargets",
-        data: targetsAfterUpdate,
-      });
-      break;
-
-    case "deletePublishTarget":
-      const targetsAfterDelete = await ConfigurationManager.deletePublishTarget(message.data);
-      await panel.webview.postMessage({
-        type: "publishTargets",
-        data: targetsAfterDelete,
       });
       break;
   }
