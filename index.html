@@ -3,8 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-     <meta http-equiv="Content-Security-Policy" 
-     content="default-src 'none'; img-src https: data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src http: https:;">
+    <meta http-equiv="Content-Security-Policy" 
+     content="default-src 'none'; 
+              img-src https: data:; 
+              script-src 'self' 'unsafe-inline'; 
+              style-src 'self' 'unsafe-inline' node_modules/@vscode/; 
+              connect-src http: https:;">
     <title>Mark My Words</title>
     <link
       rel="stylesheet"

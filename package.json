@@ -2,10 +2,10 @@
   "name": "mark-my-words",
   "displayName": "mark-my-words",
   "description": "Easily publish your markdown directly from vscode",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "icon": "assets/icon.png",
   "engines": {
-    "vscode": "^1.94.0"
+    "vscode": "^1.95.1"
   },
   "repository": {
     "type": "git",
@@ -27,11 +27,6 @@
         "command": "markMyWords.publishSelected",
         "title": "Publish Selected",
         "category,": "Mark My Words"
-      },
-      {
-        "command": "markMyWords.markSelected",
-        "title": "See Selected Stuff",
-        "category": "Mark My Words"
       }
     ],
     "configuration": {
@@ -63,6 +58,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "package": " vsce package -o mark-my-words-latest.vsix --yarn",
+    "deploy:local": "yarn package && code --install-extension mark-my-words-latest.vsix  --force",
+    "deploy:version": " code --install-extension mark-my-words-0.0.4.vsix  --force",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -96,7 +94,6 @@
         "@vscode/test-electron": "^2.4.1"
   },
     "vsce": {
-      "dependencies": true,
       "yarn": true
     }
 }

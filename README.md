@@ -9,7 +9,7 @@ usage
 configure the endpoint in the extension settings
 ![settings image](assets/settings-image.png)
 
-- the fisrt level requires
+- the first level requires
 - the name you wan to give this
 - the base url
 - the method
@@ -43,6 +43,10 @@ adding these hints will auto extract the title and description for you
 
 ### Tech stack
 
+<!---Title:vscode extension
+---Description:Tips on publishing a vscode extension
+  -->
+
 vite + preact + typescript + tailwindcss + zustand
 
 helpful references:
@@ -54,4 +58,7 @@ helpful references:
 
 - [Ben awad intor to vscode plugins](https://youtu.be/a5DX5pQ9p5M?si=AZWMJRoGVLPdtTi7) : old video on how to use vscode plugins , probably use the stater code fro the vite vscode repo but the commands and techniques are almost the same
   > [!NOTE]
-  > if you pick react remember to disbable strict mode
+  > if you pick react remember to disable strict mode
+
+
+
