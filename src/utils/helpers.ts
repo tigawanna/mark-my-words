@@ -43,12 +43,12 @@ export function extractTitleAndDescription(content: string) {
 }
 
 export function addBaseUrlToUrl(url: string, baseUrl?: string) {
-  if (!baseUrl) {
-    return url;
-  }
-  if (url.trim().startsWith("http")) {
-    return url;
-  }
+  // if (!baseUrl) {
+  //   return url;
+  // }
+  // if (url.trim().startsWith("http")) {
+  //   return url;
+  // }
   return new URL(url, baseUrl).toString();
 }
 

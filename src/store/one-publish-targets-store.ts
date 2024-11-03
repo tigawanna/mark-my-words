@@ -55,23 +55,23 @@ export const useOnePublishTargetsStore = create<ONePublishTargetsState>()(
         oneTarget: {
           id: "",
           name: "",
-          baseUrl: "https://example.com",
+          baseUrl: "",
           endpoint: "",
-          method: "GET",
+          method: "POST",
           headers: {},
           body: {},
           editing: false,
           auth: {
             name: "auth",
             body: {},
-            endpoint: "https://example.com/auth",
+            endpoint: "",
             headers: {},
             method: "POST",
             response: {},
             verification: {
               name: "auth",
               body: {},
-              endpoint: "https://example.com/auth",
+              endpoint: "",
               headers: {
                 Authorization: "",
               },

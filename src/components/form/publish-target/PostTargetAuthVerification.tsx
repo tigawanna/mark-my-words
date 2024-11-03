@@ -17,7 +17,7 @@ export function PostTargetAuthVerification({
   const defaultVerification = {
     name: oneTarget?.auth?.verification?.name ?? "auth verification",
     body: oneTarget?.auth?.verification?.body ?? {},
-    endpoint: oneTarget?.auth?.verification?.endpoint ?? "https://example.com",
+    endpoint: oneTarget?.auth?.verification?.endpoint ?? "",
     headers: oneTarget?.auth?.verification?.headers ?? {
       Authorization:oneTarget.auth?.response?.token,
     },
@@ -41,11 +41,21 @@ export function PostTargetAuthVerification({
       <div className="w-full h-full flex flex-col gap-1 ">
         <div className={""}>verification endpoint</div>
         <PublishTargetEndpoint
+        component="PostTargetAuthVerification"
           endpoint={{
             baseUrl: oneTarget?.baseUrl ?? "https://example.com",
             name: oneTarget?.auth?.verification?.name ?? "auth",
             endpoint: oneTarget?.auth?.verification?.endpoint ?? "https://example.com",
             method: oneTarget?.auth?.verification?.method ?? "POST",
+          }}
+          setMethod={(value) => {
+            setOneTargetAuth((prevAuth) => ({
+              ...prevAuth,
+              verification: {
+                ...prevAuth?.verification,
+                method: value,
+              },
+            }));
           }}
           setEndpoint={(value) => {
             setOneTargetAuth((prevAuth) => ({

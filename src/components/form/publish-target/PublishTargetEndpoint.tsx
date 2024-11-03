@@ -53,11 +53,17 @@ type Endpoint = Pick<PublishTarget, "name" | "endpoint" | "method" | "baseUrl"> 
   Partial<Pick<PublishTarget, "headers" | "body">>;
 
 interface PublishTargetEndpointProps {
+  component: string;
   endpoint: Endpoint;
   setEndpoint: (value: Partial<PublishTarget>) => void;
+  setMethod: (value:Endpoint["method"]) => void;
+  // setEndpointUrl?: (value: string) => void;
+  // setBaseUrl?: (value: string) => void;
+
 }
 
-export function PublishTargetEndpoint({ endpoint, setEndpoint }: PublishTargetEndpointProps) {
+export function PublishTargetEndpoint({ endpoint, setEndpoint,setMethod }: PublishTargetEndpointProps) {
+  // console.log(" === top level endpoint ===",component, endpoint);
   return (
     <div className="flex flex-wrap w-full gap-2 shadow-vscode-widget-shadow p-2 items-center">
       <div className="flex w-full gap-2 items-center">
@@ -85,7 +91,10 @@ export function PublishTargetEndpoint({ endpoint, setEndpoint }: PublishTargetEn
           <MethodsSelect
             method={endpoint.method}
             setMethod={(value) => {
-              setEndpoint({ ...endpoint, method: value });
+              // console.log(" === value ===", value);
+              // console.log(" === endpoint ====", endpoint);
+              // setEndpoint({ ...endpoint, method: value });
+              setMethod(value);
             }}
           />
         </div>

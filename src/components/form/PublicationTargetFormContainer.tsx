@@ -6,6 +6,12 @@ interface PublicationTargetFormContainerProps {}
 
 export function PublicationTargetFormContainer({}: PublicationTargetFormContainerProps) {
   const { oneTarget, setOneTarget,handleSubmitOneTarget,handleDeleteOneTarget } = useOnePublishTargetsStore();
+              console.log("=== PublishTargetAuthForm  top levl endpoint === ", {
+                baseUrl: oneTarget.baseUrl,
+                name: oneTarget.name,
+                endpoint: oneTarget.endpoint,
+                method: oneTarget.method,
+              });
   return (
     <div className="w-full h-full gap-3 flex border-t pt-5 mt-5 flex-col items-center justify-center">
       <h1 className="text-xl ">Publish Target {oneTarget.name}</h1>
@@ -37,20 +43,27 @@ export function PublicationTargetFormContainer({}: PublicationTargetFormContaine
         </button>
       </div>
       <PublishTargetEndpoint
+        component="PublicationTargetFormContainer"
         endpoint={{
           baseUrl: oneTarget.baseUrl,
           name: oneTarget.name,
           endpoint: oneTarget.endpoint,
           method: oneTarget.method,
         }}
+        setMethod={(value) =>{
+          setOneTarget((prev) => ({
+            ...prev,
+            method: value,
+          }));
+        }}
         setEndpoint={(value) =>
           setOneTarget((prev) => {
+            console.log("=== PublishTargetAuthForm setEndpoint value === ", value);
             return {
               ...prev,
               baseUrl: value.baseUrl ?? prev.baseUrl,
               name: value.name ?? prev.name,
               endpoint: value.endpoint ?? prev.endpoint,
-              method: value.method ?? "POST",
             };
           })
         }

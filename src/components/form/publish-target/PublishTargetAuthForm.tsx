@@ -28,17 +28,24 @@ export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
       <div className="w-full h-full flex flex-col gap-1 ">
         <div className={""}>auth endpoint</div>
         <PublishTargetEndpoint
+          component="PublishTargetAuthForm"
           endpoint={{
-            baseUrl: oneTarget?.baseUrl ?? "https://example.com",
+            baseUrl: oneTarget?.baseUrl ?? "",
             name: oneTarget?.auth?.name ?? "auth",
-            endpoint: oneTarget?.auth?.endpoint ?? "https://example.com",
+            endpoint: oneTarget?.auth?.endpoint ?? "",
             method: oneTarget?.auth?.method ?? "POST",
+          }}
+          setMethod={(value) => {
+            setOneTargetAuth((prev) => ({
+              ...prev,
+              method: value,
+            }));
           }}
           setEndpoint={(value) => {
             setOneTargetAuth((prev) => ({
               ...prev,
-              name: value?.name ?? "auth",
-              endpoint: value?.endpoint ?? "/auth",
+              name: value?.name ?? "",
+              endpoint: value?.endpoint ?? "",
               method: value?.method ?? "POST",
             }));
           }}
@@ -146,7 +153,7 @@ export function PublishTargetAuthForm({}: PublishTargetAuthFormProps) {
             test auth endpoint
             {mutation.isLoading && (
               <vscode-icon
-              class="animate-spin"
+                class="animate-spin"
                 label="Close Panel"
                 title="Close Panel"
                 name="settings-gear"
